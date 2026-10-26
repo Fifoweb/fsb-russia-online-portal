@@ -1,6 +1,6 @@
-import * as api from './auth-client.js?v=senior-reports-1';
-import { seniorRanks } from './data/senior-report-rules.js?v=senior-reports-1';
-import { internalDepartments } from './data/internal-departments.js?v=senior-reports-1';
+import * as api from './auth-client.js?v=profile-department-1';
+import { seniorRanks } from './data/senior-report-rules.js?v=profile-department-1';
+import { internalDepartments } from './data/internal-departments.js?v=profile-department-1';
 
 const drafts = new Map();
 const histories = new Map();

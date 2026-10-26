@@ -1,5 +1,5 @@
-import * as api from './auth-client.js?v=senior-reports-1';
-import { transferRules, lookupTransferRule } from './data/transfer-rules.js?v=senior-reports-1';
+import * as api from './auth-client.js?v=profile-department-1';
+import { transferRules, lookupTransferRule } from './data/transfer-rules.js?v=profile-department-1';
 
 const drafts = new Map();
 const histories = new Map();

@@ -16,6 +16,7 @@ let state = { status: 'loading', profile: null, discord: null, error: null, conf
 let initialized = false, refreshing = null, lastSignature = '';
 let unlinking = null;
 const messages = {
+  invalid_profile_department:'Выберите отдел из списка.',
   invalid_report_recipient:'Выберите адресата отчёта.',
   invalid_recipient_username:'Введите точный Discord username, с @ или без него.',
   invalid_senior_ranks:'Выберите повышение от подполковника до генерал-полковника. Новый ранг должен быть выше текущего.',
@@ -63,10 +64,10 @@ async function session() {
   if (error) throw fail('authentication_required');
   return data.session;
 }
-async function endpoint(name, body, signedIn = true) {
+async function endpoint(name, body, signedIn = true, expectedOwner = null) {
   if (!configured) throw fail('service_unavailable');
   const active = signedIn ? await session() : null;
-  if (signedIn && !active) throw fail('authentication_required');
+  if (signedIn && !active || expectedOwner && active?.user?.id !== expectedOwner) throw fail('authentication_required');
   let response;
   try {
     response = await fetch(`${appConfig.functionsBaseUrl}/${name}`, {
@@ -246,7 +247,7 @@ export async function findMyTransferByKey(idempotencyKey) {
 }
 
 export async function submitInternalTransfer(input) {
-  try { return await endpoint('portal-internal-transfer', { action: 'submit', ...input }); }
+  try { const result = await endpoint('portal-internal-transfer', { action: 'submit', ...input }); try { await refreshProfileDepartment({fresh:true}); } catch { /* The saved transfer remains successful; the cabinet retries this read. */ } return result; }
   catch (error) {
     if (error.status >= 400 && error.status < 500 && error.code !== 'idempotency_conflict') error.submissionMayExist = false;
     throw error;
@@ -285,4 +286,19 @@ export async function findMySeniorReportByKey(idempotencyKey) {
   const { data, error } = await client.from('portal_senior_reports').select('id,created_at,delivery_status,delivery_error_code,snapshot').eq('idempotency_key', idempotencyKey).maybeSingle();
   if (error) throw fail('service_unavailable');
   return data || null;
+}
+
+let departmentReading=null;
+function acceptDepartment(owner,department){
+ if(state.profile?.user_id===owner&&JSON.stringify(state.profile.department??null)!==JSON.stringify(department??null))publish({...state,profile:{...state.profile,department:department??null}});
+}
+export async function refreshProfileDepartment({fresh=false}={}){
+ if(departmentReading){if(!fresh)return departmentReading;try{await departmentReading;}catch{}}
+ const owner=state.profile?.user_id;if(!owner)throw fail('authentication_required');
+ departmentReading=(async()=>{const result=await endpoint('portal-auth',{action:'me'},true,owner);if(result.profile?.user_id!==owner)throw fail('authentication_required');acceptDepartment(owner,result.profile.department);return result.profile.department??null;})();
+ try{return await departmentReading;}finally{departmentReading=null;}
+}
+export async function saveProfileDepartment(departmentId){
+ const owner=state.profile?.user_id;if(!owner)throw fail('authentication_required');
+ const result=await endpoint('portal-auth',{action:'set-department',departmentId},true,owner);acceptDepartment(owner,result.department);return result;
 }
