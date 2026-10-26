@@ -3,51 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#050607">
-  <meta name="description" content="Информационный портал игровой фракции ФСБ проекта Россия Онлайн: управления, устав, документы, форма и справочник сотрудников.">
-  <meta property="og:title" content="ФСБ — Россия Онлайн">
-  <meta property="og:description" content="Служба начинается с порядка. Управления, документы и всё необходимое сотруднику GTA 5 RP.">
-  <title>ФСБ — Россия Онлайн</title>
-  <link rel="icon" type="image/svg+xml" href="assets/emblem.svg?v=applications-1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="На игровом портале ФСБ проекта «Россия Онлайн» проводятся технические работы. Сайт временно недоступен.">
+  <title>Технические работы — ФСБ | Россия Онлайн</title>
+  <link rel="icon" type="image/svg+xml" href="assets/emblem.svg">
   <link rel="preload" href="assets/fonts/manrope-1.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/fonts/fonts.css?v=typography-1">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="ref-theme.css?v=applications-1">
-  <link rel="stylesheet" href="applications.css?v=discord-unlink-1">
-  <link rel="stylesheet" href="typography.css?v=typography-1">
-  <link rel="stylesheet" href="transfers.css?v=guild-recipients-1">
-  <link rel="stylesheet" href="game-notice.css?v=game-notice-1">
-  <link rel="stylesheet" href="liquid-glass.css?v=liquid-1">
-  <script type="module" src="app.js?v=report-ranks-1"></script>
-  <script type="module" src="liquid-glass.js?v=liquid-1"></script>
+  <style>
+    @font-face{font-family:Manrope;src:url('assets/fonts/manrope-1.ttf') format('truetype');font-style:normal;font-weight:200 800;font-display:swap}
+    *{box-sizing:border-box}
+    html{color-scheme:dark;background:#000}
+    body{margin:0;color:#f0f0ec;font:400 16px/24px Manrope,system-ui,sans-serif}
+    .shell{display:flex;flex-direction:column;justify-content:center;min-height:100vh;min-height:100svh;width:100%;max-width:760px;margin-inline:auto;padding:48px 24px}
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:32px}
+    .brand img{width:40px;height:48px;object-fit:contain}
+    .brand strong{display:block;font-size:18px;line-height:28px;font-weight:600;letter-spacing:-.02em}
+    .brand span{display:block;font-size:12px;line-height:16px;color:#9b9b96}
+    .panel{padding:40px;border:1px solid #313131;border-radius:16px;background:#181818}
+    .status{display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border:1px solid #58513d;border-radius:9999px;color:#e5c88b;font-size:12px;line-height:16px;font-weight:600}
+    .status::before{content:'';width:8px;height:8px;border-radius:50%;background:#e5c88b;flex:none}
+    h1{margin:24px 0 16px;max-width:600px;font-size:48px;line-height:1;font-weight:600;letter-spacing:-.04em;text-wrap:balance}
+    .description{max-width:480px;margin:0;color:#b0b0ab;text-wrap:pretty}
+    .refresh{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;margin-top:32px;padding:8px 12px;border:1px solid #d84850;border-radius:8px;color:#fff;background:#bd3039;font-size:16px;line-height:24px;font-weight:600;text-decoration:none;transition:background .24s cubic-bezier(.32,.72,0,1),transform .24s cubic-bezier(.32,.72,0,1)}
+    .refresh svg{width:20px;height:20px;flex:none}
+    .refresh:hover{background:#d13b44}
+    .refresh:active{transform:translateY(1px)}
+    .refresh:focus-visible{outline:2px solid #fff;outline-offset:4px}
+    .notice{max-width:600px;margin:24px 0 0;color:#8e8e89;font-size:12px;line-height:20px;text-wrap:pretty}
+    @media(max-width:480px){.shell{padding:32px 16px}.brand{margin-bottom:24px}.panel{padding:24px;border-radius:12px}h1{font-size:36px;line-height:40px}.refresh{width:100%}.description{font-size:14px;line-height:24px}.notice{line-height:16px}}
+    @media(prefers-reduced-motion:reduce){.refresh{transition:none}}
+  </style>
 </head>
-<body class="is-booting is-intro">
-  <svg class="liquid-filter-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs><filter id="portal-liquid-lens" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="0.012 0.012" numOctaves="2" seed="19" result="portal-glass-noise"/><feDisplacementMap in="SourceGraphic" in2="portal-glass-noise" scale="8" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>
-  <div class="liquid-backdrop" aria-hidden="true"></div>
-  <div id="portal-boot" class="boot-screen" role="status" aria-live="polite" aria-label="Загрузка игрового портала">
-    <div class="boot-inner">
-      <img class="boot-emblem" src="assets/emblem.svg?v=applications-1" width="48" height="58" alt="">
-      <div class="boot-word">ФСБ</div>
-      <p class="boot-label">РОССИЯ ОНЛАЙН / ИНФОРМАЦИОННЫЙ ПОРТАЛ</p>
-      <div class="boot-progress-track" aria-hidden="true"><div id="boot-bar" class="boot-progress-bar"></div></div>
-      <div class="boot-bottom"><span id="boot-log" class="boot-log">Инициализация портала</span><span id="boot-percent" aria-hidden="true">00%</span></div>
-      <button id="boot-skip" class="boot-skip" type="button">Пропустить заставку ↗</button>
-    </div>
-  </div>
-  <script>setTimeout(function(){var b=document.getElementById('portal-boot');if(b&&!b.classList.contains('is-complete')){b.classList.add('is-complete');document.body.classList.remove('is-booting','is-intro');}},9000);</script>
-  <a class="skip-link" href="#main" data-action="skip-main">Перейти к содержимому</a>
-  <header class="site-header" id="header"></header>
-  <main id="main" tabindex="-1"><div class="container section"><p>Загружаем портал…</p></div></main>
-  <footer class="site-footer" id="footer"></footer>
-  <dialog id="search-dialog" class="search-dialog" aria-labelledby="search-title">
-    <div class="search-dialog-panel">
-      <div class="dialog-header"><span class="eyebrow" id="search-title">ПОИСК ПО ПОРТАЛУ</span><button class="dialog-close icon-button" data-action="close-search" aria-label="Закрыть поиск">×</button></div>
-      <form id="dialog-search-form" class="search-field"><input id="dialog-search-input" class="search-input" type="search" autocomplete="off" placeholder="Устав, форма, отпуск…" aria-label="Поисковый запрос"><button class="button primary" type="submit">Найти ↗</button></form>
-      <p class="muted search-hint">Документы, управления и справочник сотрудников</p>
-      <div id="dialog-search-results" class="search-results"></div>
-    </div>
-  </dialog>
-  <dialog id="lightbox" class="lightbox" aria-label="Просмотр изображения"><button class="dialog-close icon-button" data-action="close-lightbox" aria-label="Закрыть изображение">×</button><img class="lightbox-image" id="lightbox-image" alt=""><p id="lightbox-caption"></p></dialog>
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+<body>
+  <main class="shell" id="main" data-maintenance-page>
+    <header class="brand">
+      <img src="assets/emblem.svg" width="40" height="48" alt="">
+      <div><strong>ФСБ · Россия Онлайн</strong><span>Игровой портал</span></div>
+    </header>
+    <section class="panel" aria-labelledby="maintenance-title">
+      <span class="status" role="status">Технические работы</span>
+      <h1 id="maintenance-title">Сайт временно недоступен</h1>
+      <p class="description">Обновляем игровой портал. Пожалуйста, попробуйте зайти позже.</p>
+      <a class="refresh" href="">
+        <span>Обновить страницу</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M6.1 6.1a8 8 0 0 1 13 2.4L20 12M4 12l.9 3.5a8 8 0 0 0 13 2.4"/></svg>
+      </a>
+    </section>
+    <footer class="notice">Неофициальный игровой проект GTA 5 RP «Россия Онлайн». Сайт не связан с ФСБ России и другими государственными органами.</footer>
+  </main>
 </body>
 </html>

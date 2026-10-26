@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <base href="/fsb-russia-online-portal/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="На игровом портале ФСБ проекта «Россия Онлайн» проводятся технические работы. Сайт временно недоступен.">
+  <title>Технические работы — ФСБ | Россия Онлайн</title>
+  <link rel="icon" type="image/svg+xml" href="assets/emblem.svg">
+  <link rel="preload" href="assets/fonts/manrope-1.ttf" as="font" type="font/ttf" crossorigin>
+  <style>
+    @font-face{font-family:Manrope;src:url('assets/fonts/manrope-1.ttf') format('truetype');font-style:normal;font-weight:200 800;font-display:swap}
+    *{box-sizing:border-box}
+    html{color-scheme:dark;background:#000}
+    body{margin:0;color:#f0f0ec;font:400 16px/24px Manrope,system-ui,sans-serif}
+    .shell{display:flex;flex-direction:column;justify-content:center;min-height:100vh;min-height:100svh;width:100%;max-width:760px;margin-inline:auto;padding:48px 24px}
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:32px}
+    .brand img{width:40px;height:48px;object-fit:contain}
+    .brand strong{display:block;font-size:18px;line-height:28px;font-weight:600;letter-spacing:-.02em}
+    .brand span{display:block;font-size:12px;line-height:16px;color:#9b9b96}
+    .panel{padding:40px;border:1px solid #313131;border-radius:16px;background:#181818}
+    .status{display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border:1px solid #58513d;border-radius:9999px;color:#e5c88b;font-size:12px;line-height:16px;font-weight:600}
+    .status::before{content:'';width:8px;height:8px;border-radius:50%;background:#e5c88b;flex:none}
+    h1{margin:24px 0 16px;max-width:600px;font-size:48px;line-height:1;font-weight:600;letter-spacing:-.04em;text-wrap:balance}
+    .description{max-width:480px;margin:0;color:#b0b0ab;text-wrap:pretty}
+    .refresh{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;margin-top:32px;padding:8px 12px;border:1px solid #d84850;border-radius:8px;color:#fff;background:#bd3039;font-size:16px;line-height:24px;font-weight:600;text-decoration:none;transition:background .24s cubic-bezier(.32,.72,0,1),transform .24s cubic-bezier(.32,.72,0,1)}
+    .refresh svg{width:20px;height:20px;flex:none}
+    .refresh:hover{background:#d13b44}
+    .refresh:active{transform:translateY(1px)}
+    .refresh:focus-visible{outline:2px solid #fff;outline-offset:4px}
+    .notice{max-width:600px;margin:24px 0 0;color:#8e8e89;font-size:12px;line-height:20px;text-wrap:pretty}
+    @media(max-width:480px){.shell{padding:32px 16px}.brand{margin-bottom:24px}.panel{padding:24px;border-radius:12px}h1{font-size:36px;line-height:40px}.refresh{width:100%}.description{font-size:14px;line-height:24px}.notice{line-height:16px}}
+    @media(prefers-reduced-motion:reduce){.refresh{transition:none}}
+  </style>
+</head>
+<body>
+  <main class="shell" id="main" data-maintenance-page>
+    <header class="brand">
+      <img src="assets/emblem.svg" width="40" height="48" alt="">
+      <div><strong>ФСБ · Россия Онлайн</strong><span>Игровой портал</span></div>
+    </header>
+    <section class="panel" aria-labelledby="maintenance-title">
+      <span class="status" role="status">Технические работы</span>
+      <h1 id="maintenance-title">Сайт временно недоступен</h1>
+      <p class="description">Обновляем игровой портал. Пожалуйста, попробуйте зайти позже.</p>
+      <a class="refresh" href="">
+        <span>Обновить страницу</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M6.1 6.1a8 8 0 0 1 13 2.4L20 12M4 12l.9 3.5a8 8 0 0 0 13 2.4"/></svg>
+      </a>
+    </section>
+    <footer class="notice">Неофициальный игровой проект GTA 5 RP «Россия Онлайн». Сайт не связан с ФСБ России и другими государственными органами.</footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050607">
+  <meta name="description" content="Информационный портал игровой фракции ФСБ проекта Россия Онлайн: управления, устав, документы, форма и справочник сотрудников.">
+  <meta property="og:title" content="ФСБ — Россия Онлайн">
+  <meta property="og:description" content="Служба начинается с порядка. Управления, документы и всё необходимое сотруднику GTA 5 RP.">
+  <title>ФСБ — Россия Онлайн</title>
+  <link rel="icon" type="image/svg+xml" href="assets/emblem.svg?v=applications-1">
+  <link rel="preload" href="assets/fonts/manrope-1.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="assets/fonts/fonts.css?v=typography-1">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="ref-theme.css?v=applications-1">
+  <link rel="stylesheet" href="applications.css?v=discord-unlink-1">
+  <link rel="stylesheet" href="typography.css?v=typography-1">
+  <link rel="stylesheet" href="transfers.css?v=guild-recipients-1">
+  <link rel="stylesheet" href="game-notice.css?v=game-notice-1">
+  <link rel="stylesheet" href="liquid-glass.css?v=liquid-1">
+  <script type="module" src="app.js?v=report-ranks-1"></script>
+  <script type="module" src="liquid-glass.js?v=liquid-1"></script>
+</head>
+<body class="is-booting is-intro">
+  <svg class="liquid-filter-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs><filter id="portal-liquid-lens" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="0.012 0.012" numOctaves="2" seed="19" result="portal-glass-noise"/><feDisplacementMap in="SourceGraphic" in2="portal-glass-noise" scale="8" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>
+  <div class="liquid-backdrop" aria-hidden="true"></div>
+  <div id="portal-boot" class="boot-screen" role="status" aria-live="polite" aria-label="Загрузка игрового портала">
+    <div class="boot-inner">
+      <img class="boot-emblem" src="assets/emblem.svg?v=applications-1" width="48" height="58" alt="">
+      <div class="boot-word">ФСБ</div>
+      <p class="boot-label">РОССИЯ ОНЛАЙН / ИНФОРМАЦИОННЫЙ ПОРТАЛ</p>
+      <div class="boot-progress-track" aria-hidden="true"><div id="boot-bar" class="boot-progress-bar"></div></div>
+      <div class="boot-bottom"><span id="boot-log" class="boot-log">Инициализация портала</span><span id="boot-percent" aria-hidden="true">00%</span></div>
+      <button id="boot-skip" class="boot-skip" type="button">Пропустить заставку ↗</button>
+    </div>
+  </div>
+  <script>setTimeout(function(){var b=document.getElementById('portal-boot');if(b&&!b.classList.contains('is-complete')){b.classList.add('is-complete');document.body.classList.remove('is-booting','is-intro');}},9000);</script>
+  <a class="skip-link" href="#main" data-action="skip-main">Перейти к содержимому</a>
+  <header class="site-header" id="header"></header>
+  <main id="main" tabindex="-1"><div class="container section"><p>Загружаем портал…</p></div></main>
+  <footer class="site-footer" id="footer"></footer>
+  <dialog id="search-dialog" class="search-dialog" aria-labelledby="search-title">
+    <div class="search-dialog-panel">
+      <div class="dialog-header"><span class="eyebrow" id="search-title">ПОИСК ПО ПОРТАЛУ</span><button class="dialog-close icon-button" data-action="close-search" aria-label="Закрыть поиск">×</button></div>
+      <form id="dialog-search-form" class="search-field"><input id="dialog-search-input" class="search-input" type="search" autocomplete="off" placeholder="Устав, форма, отпуск…" aria-label="Поисковый запрос"><button class="button primary" type="submit">Найти ↗</button></form>
+      <p class="muted search-hint">Документы, управления и справочник сотрудников</p>
+      <div id="dialog-search-results" class="search-results"></div>
+    </div>
+  </dialog>
+  <dialog id="lightbox" class="lightbox" aria-label="Просмотр изображения"><button class="dialog-close icon-button" data-action="close-lightbox" aria-label="Закрыть изображение">×</button><img class="lightbox-image" id="lightbox-image" alt=""><p id="lightbox-caption"></p></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
