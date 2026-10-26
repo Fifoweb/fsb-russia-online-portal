@@ -1,3 +1,4 @@
+import { renderInternalTransferService } from './internal-transfers.js?v=internal-transfer-1';
 import { renderTransferService } from './transfers.js?v=internal-transfer-1';
 import * as accountApi from './auth-client.js?v=internal-transfer-1';
 
@@ -103,7 +104,7 @@ function historySection(state, title = 'Мои заявки') {
 export function renderApplicationsPage() {
   const state = safeState();
   const linked = isLinked(state);
-  return heading('Заявки', 'Ваши обращения', 'Подайте заявку на восстановление или перевод в ФСБ и проверьте её доставку.') + `<section class="container portal-page" data-portal-page="applications">${linked ? accountStrip(state) : accessGate(state)}<a href="${linked ? '#/applications/reinstatement' : '#/account?tab=login'}" class="portal-service ${linked ? '' : 'is-locked'}" ${linked ? '' : 'data-portal-action="explain-gate"'}><div class="portal-service-copy"><span class="portal-service-icon" aria-hidden="true">${documentIcon()}</span><div><h2>Восстановление во фракцию</h2><p>Обычное увольнение или увольнение после бана либо варна. Доказательства принимаются по ссылкам.</p></div></div><span class="portal-service-action">${linked ? 'Заполнить заявку' : 'Войти в аккаунт'} ${arrow}</span></a>${renderTransferService()}${isMember(state) ? historySection(state) : ''}</section>`;
+  return heading('Заявки', 'Ваши обращения', 'Подайте заявку на восстановление, перевод в ФСБ или между отделами и проверьте её доставку.') + `<section class="container portal-page" data-portal-page="applications">${linked ? accountStrip(state) : accessGate(state)}<a href="${linked ? '#/applications/reinstatement' : '#/account?tab=login'}" class="portal-service ${linked ? '' : 'is-locked'}" ${linked ? '' : 'data-portal-action="explain-gate"'}><div class="portal-service-copy"><span class="portal-service-icon" aria-hidden="true">${documentIcon()}</span><div><h2>Восстановление во фракцию</h2><p>Обычное увольнение или увольнение после бана либо варна. Доказательства принимаются по ссылкам.</p></div></div><span class="portal-service-action">${linked ? 'Заполнить заявку' : 'Войти в аккаунт'} ${arrow}</span></a>${renderTransferService()}${renderInternalTransferService()}${isMember(state) ? historySection(state) : ''}</section>`;
 }
 
 function documentIcon() {
