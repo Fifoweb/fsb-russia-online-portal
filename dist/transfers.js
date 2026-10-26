@@ -1,5 +1,5 @@
-import * as api from './auth-client.js?v=discord-unlink-1';
-import { transferRules, lookupTransferRule } from './data/transfer-rules.js?v=discord-unlink-1';
+import * as api from './auth-client.js?v=internal-transfer-1';
+import { transferRules, lookupTransferRule } from './data/transfer-rules.js?v=internal-transfer-1';
 
 const drafts = new Map();
 const histories = new Map();

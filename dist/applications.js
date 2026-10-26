@@ -1,5 +1,5 @@
-import { renderTransferService } from './transfers.js?v=discord-unlink-1';
-import * as accountApi from './auth-client.js?v=discord-unlink-1';
+import { renderTransferService } from './transfers.js?v=internal-transfer-1';
+import * as accountApi from './auth-client.js?v=internal-transfer-1';
 
 const MAX_FILE = 4 * 1024 * 1024;
 const ALLOWED_TYPES = new Set(['image/png', 'image/jpeg', 'image/webp']);

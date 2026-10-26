@@ -38,6 +38,7 @@ const messages = {
   transfer_rank_not_in_table: 'Такого ранга нет в таблице для выбранной структуры.',
   invalid_transfer_structure: 'Выберите структуру, из которой переводитесь.',
   invalid_passport_number: 'Номер игрового паспорта должен состоять из цифр.',
+  invalid_internal_departments: 'Выберите текущий и другой желаемый отдел.',
   invalid_transfer_reason: 'Укажите причину перевода, не длиннее 1000 символов.',
   transfer_consent_required: 'Подтвердите отправку игровых данных руководству в Discord.',
 };
@@ -109,7 +110,7 @@ export async function initAccount() {
   let callbackError = null;
   if (code || oauthError) {
     let returnPath = '#/account';
-    try { const saved = sessionStorage.getItem('portal-discord-return'); if (/^#\/(applications(?:\/(?:reinstatement|transfer))?|account)(?:\?.*)?$/.test(saved || '')) returnPath = saved; sessionStorage.removeItem('portal-discord-return'); } catch { /* storage may be disabled */ }
+    try { const saved = sessionStorage.getItem('portal-discord-return'); if (/^#\/(applications(?:\/(?:reinstatement|transfer|internal-transfer))?|account)(?:\?.*)?$/.test(saved || '')) returnPath = saved; sessionStorage.removeItem('portal-discord-return'); } catch { /* storage may be disabled */ }
     if (code) {
       const { error } = await client.auth.exchangeCodeForSession(code);
       if (error) callbackError = 'Не удалось завершить вход через Discord. Попробуйте привязать аккаунт ещё раз.';
@@ -159,7 +160,7 @@ export function unlinkDiscord() {
 }
 export async function linkDiscord(returnPath) {
   if (!(await session())) throw fail('authentication_required');
-  try { sessionStorage.setItem('portal-discord-return', returnPath === '#/applications/transfer' ? returnPath : window.location.hash.startsWith('#/applications') ? window.location.hash : '#/applications/reinstatement'); } catch { /* PKCE SDK will report if storage unavailable */ }
+  try { sessionStorage.setItem('portal-discord-return', ['#/applications/transfer','#/applications/internal-transfer'].includes(returnPath) ? returnPath : window.location.hash.startsWith('#/applications') ? window.location.hash : '#/applications/reinstatement'); } catch { /* PKCE SDK will report if storage unavailable */ }
   // PKCE verifier belongs to this origin. Return to the same origin and project
   // path on GitHub Pages; Supabase's exact allowlist validates the destination.
   const { error } = await client.auth.linkIdentity({ provider: 'discord', options: { redirectTo: discordCallbackUrl(window.location.href) } });
@@ -235,6 +236,27 @@ export async function listMyTransfers() {
 export async function findMyTransferByKey(idempotencyKey) {
   if (!(await session())) throw fail('authentication_required');
   const { data, error } = await client.from('portal_transfer_applications').select('id,created_at,delivery_status,delivery_error_code,snapshot').eq('idempotency_key', idempotencyKey).maybeSingle();
+  if (error) throw fail('service_unavailable');
+  return data || null;
+}
+
+export async function submitInternalTransfer(input) {
+  try { return await endpoint('portal-internal-transfer', { action: 'submit', ...input }); }
+  catch (error) {
+    if (error.status >= 400 && error.status < 500 && error.code !== 'idempotency_conflict') error.submissionMayExist = false;
+    throw error;
+  }
+}
+export async function retryInternalTransfer(applicationId) { return endpoint('portal-internal-transfer', { action: 'retry', applicationId }); }
+export async function listMyInternalTransfers() {
+  if (!(await session())) return [];
+  const { data, error } = await client.from('portal_internal_transfers').select('id,created_at,delivery_status,delivery_error_code,snapshot').order('created_at', { ascending: false }).limit(20);
+  if (error) throw fail('service_unavailable');
+  return data || [];
+}
+export async function findMyInternalTransferByKey(idempotencyKey) {
+  if (!(await session())) throw fail('authentication_required');
+  const { data, error } = await client.from('portal_internal_transfers').select('id,created_at,delivery_status,delivery_error_code,snapshot').eq('idempotency_key', idempotencyKey).maybeSingle();
   if (error) throw fail('service_unavailable');
   return data || null;
 }
