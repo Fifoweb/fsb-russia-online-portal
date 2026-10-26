@@ -16,6 +16,11 @@ let state = { status: 'loading', profile: null, discord: null, error: null, conf
 let initialized = false, refreshing = null, lastSignature = '';
 let unlinking = null;
 const messages = {
+  invalid_report_recipient:'Выберите адресата отчёта.',
+  invalid_recipient_username:'Введите точный Discord username, с @ или без него.',
+  invalid_senior_ranks:'Выберите повышение от подполковника до генерал-полковника. Новый ранг должен быть выше текущего.',
+  invalid_report_evidence:'Добавьте от 1 до 10 HTTPS-ссылок на доказательства работы.',
+  report_consent_required:'Подтвердите отправку отчёта в Discord.',
   authentication_required: 'Войдите в свой аккаунт.',
   invalid_credentials: 'Неверный Static ID или пароль.',
   registration_unavailable: 'Не удалось зарегистрироваться. Возможно, этот никнейм или Static ID уже занят.',
@@ -110,7 +115,7 @@ export async function initAccount() {
   let callbackError = null;
   if (code || oauthError) {
     let returnPath = '#/account';
-    try { const saved = sessionStorage.getItem('portal-discord-return'); if (/^#\/(applications(?:\/(?:reinstatement|transfer|internal-transfer))?|account)(?:\?.*)?$/.test(saved || '')) returnPath = saved; sessionStorage.removeItem('portal-discord-return'); } catch { /* storage may be disabled */ }
+    try { const saved = sessionStorage.getItem('portal-discord-return'); if (/^#\/(applications(?:\/(?:reinstatement|transfer|internal-transfer|senior-report))?|account)(?:\?.*)?$/.test(saved || '')) returnPath = saved; sessionStorage.removeItem('portal-discord-return'); } catch { /* storage may be disabled */ }
     if (code) {
       const { error } = await client.auth.exchangeCodeForSession(code);
       if (error) callbackError = 'Не удалось завершить вход через Discord. Попробуйте привязать аккаунт ещё раз.';
@@ -160,7 +165,7 @@ export function unlinkDiscord() {
 }
 export async function linkDiscord(returnPath) {
   if (!(await session())) throw fail('authentication_required');
-  try { sessionStorage.setItem('portal-discord-return', ['#/applications/transfer','#/applications/internal-transfer'].includes(returnPath) ? returnPath : window.location.hash.startsWith('#/applications') ? window.location.hash : '#/applications/reinstatement'); } catch { /* PKCE SDK will report if storage unavailable */ }
+  try { sessionStorage.setItem('portal-discord-return', ['#/applications/transfer','#/applications/internal-transfer','#/applications/senior-report'].includes(returnPath) ? returnPath : window.location.hash.startsWith('#/applications') ? window.location.hash : '#/applications/reinstatement'); } catch { /* PKCE SDK will report if storage unavailable */ }
   // PKCE verifier belongs to this origin. Return to the same origin and project
   // path on GitHub Pages; Supabase's exact allowlist validates the destination.
   const { error } = await client.auth.linkIdentity({ provider: 'discord', options: { redirectTo: discordCallbackUrl(window.location.href) } });
@@ -257,6 +262,27 @@ export async function listMyInternalTransfers() {
 export async function findMyInternalTransferByKey(idempotencyKey) {
   if (!(await session())) throw fail('authentication_required');
   const { data, error } = await client.from('portal_internal_transfers').select('id,created_at,delivery_status,delivery_error_code,snapshot').eq('idempotency_key', idempotencyKey).maybeSingle();
+  if (error) throw fail('service_unavailable');
+  return data || null;
+}
+
+export async function submitSeniorReport(input) {
+  try { return await endpoint('portal-senior-report', { action: 'submit', ...input }); }
+  catch (error) {
+    if (error.status >= 400 && error.status < 500 && error.code !== 'idempotency_conflict') error.submissionMayExist = false;
+    throw error;
+  }
+}
+export async function retrySeniorReport(applicationId) { return endpoint('portal-senior-report', { action: 'retry', applicationId }); }
+export async function listMySeniorReports() {
+  if (!(await session())) return [];
+  const { data, error } = await client.from('portal_senior_reports').select('id,created_at,delivery_status,delivery_error_code,snapshot').order('created_at', { ascending: false }).limit(20);
+  if (error) throw fail('service_unavailable');
+  return data || [];
+}
+export async function findMySeniorReportByKey(idempotencyKey) {
+  if (!(await session())) throw fail('authentication_required');
+  const { data, error } = await client.from('portal_senior_reports').select('id,created_at,delivery_status,delivery_error_code,snapshot').eq('idempotency_key', idempotencyKey).maybeSingle();
   if (error) throw fail('service_unavailable');
   return data || null;
 }

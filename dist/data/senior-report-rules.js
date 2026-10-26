@@ -1,0 +1,1 @@
+export const seniorRanks = Object.freeze([{"id": "lt_colonel", "label": "Подполковник"}, {"id": "colonel", "label": "Полковник"}, {"id": "major_general", "label": "Генерал-майор"}, {"id": "lt_general", "label": "Генерал-лейтенант"}, {"id": "colonel_general", "label": "Генерал-полковник"}].map(item => Object.freeze(item)));
