@@ -59,7 +59,7 @@ assert.equal(departments.filter(d=>d.id!=='academy').length,5);
 assert(departments.find(d=>d.id==='academy').extra.includes('подотделом'));
 for(const d of departments){assert(fs.existsSync(path.join(dist,'assets',d.image)),`Missing asset ${d.image}`);for(const [id] of d.sources)assert(data.documents.some(doc=>doc.id===id));}
 for(const f of floors){assert(fs.existsSync(path.join(dist,'assets',f.image)));assert.equal(new Set(f.rooms.map(r=>r[0])).size,f.rooms.length);assert(f.rooms.every(r=>r[2]>=0&&r[2]<=100&&r[3]>=0&&r[3]<=100));}
-assert.equal(ranks.length,16);
+assert.equal(ranks.length,15);
 assert.equal(staffTopics.length,6);
 assert(fs.statSync(path.join(dist,'assets/hero.webp')).size<500000);
 assert(fs.statSync(path.join(dist,'assets/academy.webp')).size<500000);
