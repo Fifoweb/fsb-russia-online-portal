@@ -1,5 +1,5 @@
 import { renderAccountDepartment } from './account-department.js?v=guild-recipients-1';
-import { renderSeniorReportService } from './senior-reports.js?v=senior-author-1';
+import { renderSeniorReportService } from './senior-reports.js?v=report-ranks-1';
 import { renderInternalTransferService } from './internal-transfers.js?v=guild-recipients-1';
 import { renderTransferService } from './transfers.js?v=guild-recipients-1';
 import * as accountApi from './auth-client.js?v=guild-recipients-1';

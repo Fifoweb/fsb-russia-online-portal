@@ -1,8 +1,8 @@
 import { mountAccountDepartment } from './account-department.js?v=guild-recipients-1';
-import { renderSeniorReportPage, renderSeniorReportService, renderSeniorReportHistorySection, mountSeniorReports } from './senior-reports.js?v=senior-author-1';
+import { renderSeniorReportPage, renderSeniorReportService, renderSeniorReportHistorySection, mountSeniorReports } from './senior-reports.js?v=report-ranks-1';
 import { renderInternalTransferPage, renderInternalTransferService, renderInternalTransferHistorySection, mountInternalTransfers } from './internal-transfers.js?v=guild-recipients-1';
 import { initAccount, getAccountState } from './auth-client.js?v=guild-recipients-1';
-import { renderApplicationsPage, renderReinstatementPage, renderAccountPage, mountApplicationPage } from './applications.js?v=senior-author-1';
+import { renderApplicationsPage, renderReinstatementPage, renderAccountPage, mountApplicationPage } from './applications.js?v=report-ranks-1';
 import { departments, ranks, staffTopics, floors } from './data/portal.js?v=rank-roles-1';
 import { renderReferenceHome, renderReferenceHeader } from './home.js?v=guild-recipients-1';
 import { renderTransferPage, renderTransferService, renderTransferHistorySection, mountTransfers } from './transfers.js?v=guild-recipients-1';
