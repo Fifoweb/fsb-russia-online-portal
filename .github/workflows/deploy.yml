@@ -26,7 +26,7 @@ jobs:
       - name: Check public files and authentication protections
         run: |
           node scripts/check.mjs
-          node --test scripts/auth-privacy.test.mjs scripts/auth-redirect.test.mjs
+          node --test scripts/auth-privacy.test.mjs scripts/auth-redirect.test.mjs scripts/auth-unlink.test.mjs
       - name: Configure GitHub Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
       - name: Upload public site

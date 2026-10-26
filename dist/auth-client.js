@@ -2,6 +2,7 @@ import { createClient } from './vendor/supabase/supabase.js';
 import { appConfig } from './data/app-config.js';
 import { createPrivateAuthFetch, createPrivateAuthStorage } from './auth-privacy.js';
 import { discordCallbackUrl } from './auth-redirect.js';
+import { unlinkDiscordIdentity } from './discord-unlink.js';
 
 const configured = Boolean(appConfig.supabaseUrl && appConfig.publishableKey);
 const authStorageKey = configured ? `sb-${new URL(appConfig.supabaseUrl).hostname.split('.')[0]}-auth-token` : null;
@@ -13,6 +14,7 @@ const client = configured ? createClient(appConfig.supabaseUrl, appConfig.publis
 const listeners = new Set();
 let state = { status: 'loading', profile: null, discord: null, error: null, configured };
 let initialized = false, refreshing = null, lastSignature = '';
+let unlinking = null;
 const messages = {
   authentication_required: 'Войдите в свой аккаунт.',
   invalid_credentials: 'Неверный Static ID или пароль.',
@@ -23,6 +25,9 @@ const messages = {
   evidence_links_only: 'Доказательства принимаются только по ссылкам.',
   discord_link_required: 'Сначала привяжите Discord к аккаунту.',
   discord_identity_changed: 'Discord аккаунта изменился. Обратитесь к руководству по сохранённой заявке.',
+  discord_unlink_unavailable: 'Не удалось безопасно отвязать Discord. Войдите по Static ID и паролю или обратитесь к руководству.',
+  discord_unlink_failed: 'Discord пока не отвязан. Повторите попытку немного позже.',
+  discord_unlink_unconfirmed: 'Не удалось проверить отвязку Discord. Обновите кабинет и проверьте статус перед повторной попыткой.',
   rate_limited: 'Слишком много попыток. Подождите несколько минут и попробуйте снова.',
   origin_not_allowed: 'Адрес сайта ещё не подключён к сервису заявок.',
   idempotency_conflict: 'Эта заявка уже сохранена с другими данными. Обновите список заявок.',
@@ -134,6 +139,23 @@ export async function loginAccount({ staticId, password }) {
 export async function logoutAccount() {
   if (client) { const { error } = await client.auth.signOut({ scope: 'local' }); if (error) throw fail('service_unavailable'); }
   publish({ status: 'anonymous', profile: null, discord: null, error: null });
+}
+export function unlinkDiscord() {
+  if (unlinking) return unlinking;
+  unlinking = (async () => {
+    if (!(await session()) || !state.profile) throw fail('authentication_required');
+    const userId = state.profile.user_id;
+    let failureCode;
+    try { await unlinkDiscordIdentity(client.auth, userId); }
+    catch (error) { failureCode = error.code || 'discord_unlink_unconfirmed'; }
+    // Do not reuse a profile request that began before the identity was removed.
+    if (refreshing) await refreshing;
+    const updated = await refreshAccount();
+    if (updated.profile?.user_id === userId && updated.status === 'registered' && !updated.discord) return updated;
+    if (updated.status === 'anonymous' || updated.profile?.user_id && updated.profile.user_id !== userId) throw fail('authentication_required');
+    throw fail(failureCode || 'discord_unlink_unconfirmed');
+  })().finally(() => { unlinking = null; });
+  return unlinking;
 }
 export async function linkDiscord(returnPath) {
   if (!(await session())) throw fail('authentication_required');
