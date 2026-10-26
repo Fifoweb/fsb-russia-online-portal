@@ -1,8 +1,8 @@
-import { initAccount, getAccountState } from './auth-client.js?v=static-login-1';
-import { renderApplicationsPage, renderReinstatementPage, renderAccountPage, mountApplicationPage } from './applications.js?v=static-login-1';
+import { initAccount, getAccountState } from './auth-client.js?v=static-login-2';
+import { renderApplicationsPage, renderReinstatementPage, renderAccountPage, mountApplicationPage } from './applications.js?v=static-login-2';
 import { departments, ranks, staffTopics, floors } from './data/portal.js?v=applications-1';
-import { renderReferenceHome, renderReferenceHeader } from './home.js?v=static-login-1';
-import { renderTransferPage, renderTransferService, renderTransferHistorySection, mountTransfers } from './transfers.js?v=static-login-1';
+import { renderReferenceHome, renderReferenceHeader } from './home.js?v=static-login-2';
+import { renderTransferPage, renderTransferService, renderTransferHistorySection, mountTransfers } from './transfers.js?v=static-login-2';
 import { startBoot, animatePage } from './motion.js';
 let motionCleanup, sceneCleanup, applicationCleanup, currentRoutePath=null;
 

@@ -1,5 +1,5 @@
-import * as api from './auth-client.js?v=static-login-1';
-import { transferRules, lookupTransferRule } from './data/transfer-rules.js?v=static-login-1';
+import * as api from './auth-client.js?v=static-login-2';
+import { transferRules, lookupTransferRule } from './data/transfer-rules.js?v=static-login-2';
 
 const drafts = new Map();
 const histories = new Map();
