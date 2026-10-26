@@ -1,5 +1,5 @@
-import * as api from './auth-client.js?v=profile-department-1';
-import { internalDepartments } from './data/internal-departments.js?v=profile-department-1';
+import * as api from './auth-client.js?v=guild-recipients-1';
+import { internalDepartments } from './data/internal-departments.js?v=guild-recipients-1';
 
 const drafts = new Map();
 const histories = new Map();

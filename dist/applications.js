@@ -1,8 +1,8 @@
-import { renderAccountDepartment } from './account-department.js?v=profile-department-1';
-import { renderSeniorReportService } from './senior-reports.js?v=profile-department-1';
-import { renderInternalTransferService } from './internal-transfers.js?v=profile-department-1';
-import { renderTransferService } from './transfers.js?v=profile-department-1';
-import * as accountApi from './auth-client.js?v=profile-department-1';
+import { renderAccountDepartment } from './account-department.js?v=guild-recipients-1';
+import { renderSeniorReportService } from './senior-reports.js?v=guild-recipients-1';
+import { renderInternalTransferService } from './internal-transfers.js?v=guild-recipients-1';
+import { renderTransferService } from './transfers.js?v=guild-recipients-1';
+import * as accountApi from './auth-client.js?v=guild-recipients-1';
 
 const MAX_FILE = 4 * 1024 * 1024;
 const ALLOWED_TYPES = new Set(['image/png', 'image/jpeg', 'image/webp']);

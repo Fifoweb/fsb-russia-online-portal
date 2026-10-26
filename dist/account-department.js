@@ -1,5 +1,5 @@
-import * as api from './auth-client.js?v=profile-department-1';
-import { internalDepartments } from './data/internal-departments.js?v=profile-department-1';
+import * as api from './auth-client.js?v=guild-recipients-1';
+import { internalDepartments } from './data/internal-departments.js?v=guild-recipients-1';
 
 const actions=new Map(),views=new Set();
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

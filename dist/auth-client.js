@@ -16,6 +16,16 @@ let state = { status: 'loading', profile: null, discord: null, error: null, conf
 let initialized = false, refreshing = null, lastSignature = '';
 let unlinking = null;
 const messages = {
+  discord_member_token_invalid:'Discord не принял настройки поиска. Сообщите руководству.',
+  discord_member_access_denied:'Поиск не получил доступ к серверу ФСБ. Сообщите руководству.',
+  invalid_report_people:'Укажите не более пяти Discord username или ID.',
+  discord_member_lookup_not_configured:'Поиск участников Discord ещё не подключён. Сообщите руководству.',
+  discord_member_lookup_unavailable:'Не удалось проверить участников Discord. Попробуйте позднее.',
+  discord_member_guild_mismatch:'Не удалось проверить сервер для отчётов. Сообщите руководству.',
+  discord_member_not_found:'Участник не найден на сервере ФСБ. Проверьте Discord username или укажите Discord ID.',
+  discord_member_ambiguous:'По имени найдено несколько участников. Укажите Discord ID нужного человека.',
+  discord_member_search_too_large:'По этому имени слишком много совпадений. Укажите Discord ID.',
+  discord_member_rate_limited:'Discord ограничил частоту проверок. Повторите попытку позднее.',
   invalid_profile_department:'Выберите отдел из списка.',
   invalid_report_recipient:'Выберите адресата отчёта.',
   invalid_recipient_username:'Введите точный Discord username, с @ или без него.',
@@ -81,6 +91,7 @@ async function endpoint(name, body, signedIn = true, expectedOwner = null) {
   try { result = await response.json(); } catch { throw fail('service_unavailable'); }
   if (!response.ok || result.error) {
     const error = fail(result.error?.code || 'service_unavailable');
+    if(Number.isInteger(result.error?.personIndex)&&result.error.personIndex>=1&&result.error.personIndex<=5)error.message=`Человек ${result.error.personIndex}: ${error.message}`;
     error.status = response.status;
     throw error;
   }
@@ -270,7 +281,7 @@ export async function findMyInternalTransferByKey(idempotencyKey) {
 export async function submitSeniorReport(input) {
   try { return await endpoint('portal-senior-report', { action: 'submit', ...input }); }
   catch (error) {
-    if (error.status >= 400 && error.status < 500 && error.code !== 'idempotency_conflict') error.submissionMayExist = false;
+    if (error.code?.startsWith('discord_member_') || error.status >= 400 && error.status < 500 && error.code !== 'idempotency_conflict') error.submissionMayExist = false;
     throw error;
   }
 }
@@ -301,4 +312,9 @@ export async function refreshProfileDepartment({fresh=false}={}){
 export async function saveProfileDepartment(departmentId){
  const owner=state.profile?.user_id;if(!owner)throw fail('authentication_required');
  const result=await endpoint('portal-auth',{action:'set-department',departmentId},true,owner);acceptDepartment(owner,result.department);return result;
+}
+
+export async function checkSeniorReportPeople(recipientUsernames){
+ const owner=state.profile?.user_id;if(!owner)throw fail('authentication_required');
+ return endpoint('portal-senior-report',{action:'check-people',recipientUsernames},true,owner);
 }
