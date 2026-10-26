@@ -1,6 +1,11 @@
 # ФСБ — Россия Онлайн: игровой портал
 
-Сайт: https://fifoweb.github.io/fsb-russia-online-portal/
+Основной сайт: https://fifoweb.github.io/
+
+Основной репозиторий: https://github.com/Fifoweb/fifoweb.github.io . Этот
+репозиторий и адрес `https://fifoweb.github.io/fsb-russia-online-portal/`
+сохранены как резервные. Дальнейшие обновления основного сайта публикуются
+через `Fifoweb/fifoweb.github.io`.
 
 Неофициальный портал игровой фракции GTA 5 RP проекта «Россия Онлайн». Не является ресурсом ФСБ России или других государственных органов и не действует от их имени.
 
