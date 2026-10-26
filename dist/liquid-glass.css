@@ -1,0 +1,146 @@
+/* Dark optical surfaces, adapted for this portal from Liquid Glass Studio.
+   Reference and MIT notice: assets/liquid-glass/README.md and LICENSE. */
+:root {
+  --glass-fill: rgba(24, 24, 24, .70);
+  --glass-edge: rgba(255, 255, 255, .20);
+  --glass-blur: 18px;
+  --glass-radius: 16px;
+  --glass-ease: cubic-bezier(.32, .72, 0, 1);
+}
+body { background: #000; isolation: isolate; }
+.liquid-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: #000 url('assets/hero.webp') center / cover no-repeat;
+  opacity: .24;
+  filter: saturate(.65);
+  contain: strict;
+}
+.liquid-filter-defs { position: absolute; width: 0; height: 0; overflow: hidden; pointer-events: none; }
+.liquid-surface {
+  position: relative;
+  isolation: isolate;
+  background: #181818;
+  border: 1px solid var(--glass-edge);
+  border-radius: var(--glass-radius);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, .24), inset 0 1px 0 rgba(255, 255, 255, .22), inset 0 -1px 0 rgba(255, 255, 255, .06);
+  transition: border-color .7s var(--glass-ease), background-color .7s var(--glass-ease), box-shadow .7s var(--glass-ease);
+}
+/* Refraction occupies a separate layer behind content. Text is never filtered. */
+.liquid-surface::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  width: auto;
+  height: auto;
+  z-index: -1;
+  border-radius: max(0px, calc(var(--glass-radius) - 2px));
+  clip-path: inset(0 round max(0px, calc(var(--glass-radius) - 2px)));
+  background: none;
+  pointer-events: none;
+  box-shadow: inset var(--glass-light-x, 1px) var(--glass-light-y, 1px) 1px rgba(255, 255, 255, .16), inset -1px -1px 1px rgba(255, 255, 255, .04);
+}
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .liquid-surface {
+    background: var(--glass-fill);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(145%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(145%);
+  }
+}
+@supports (backdrop-filter: url('#portal-liquid-lens')) {
+  .liquid-surface.glass-lens::before { backdrop-filter: url('#portal-liquid-lens'); }
+}
+.site-header.liquid-surface {
+  --glass-fill: rgba(24, 24, 24, .62);
+  --glass-radius: 24px;
+  position: sticky;
+  top: 16px;
+  width: min(1480px, calc(100% - 48px));
+  margin: 16px auto 0;
+  z-index: 70;
+}
+.site-header .header-inner { width: calc(100% - 32px); margin-inline: auto; }
+.site-header .icon-button,
+.site-header .button,
+.button,
+.portal-page .button {
+  border-radius: 12px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18), inset 0 -1px 0 rgba(255, 255, 255, .04), 0 4px 12px rgba(0, 0, 0, .12);
+  transition: background-color .4s var(--glass-ease), border-color .4s var(--glass-ease), transform .4s var(--glass-ease), box-shadow .4s var(--glass-ease);
+}
+.button.secondary,
+.portal-page .button.secondary,
+.site-header .icon-button { background: rgba(49, 49, 49, .38); border-color: rgba(255, 255, 255, .24); }
+.button.secondary:hover,
+.portal-page .button.secondary:hover,
+.site-header .icon-button:hover { background: rgba(49, 49, 49, .72); border-color: rgba(255, 255, 255, .48); }
+.button.primary { background: rgba(244, 244, 241, .90); border-color: rgba(255, 255, 255, .65); }
+.portal-page .button.primary { background: rgba(189, 48, 57, .94); border-color: rgba(255, 164, 171, .60); color: #fff; }
+.portal-page .button.primary:hover { background: #c83b44; border-color: #ffb5bb; }
+.button:active:not(:disabled) { transform: translateY(1px); }
+.mobile-menu.liquid-surface {
+  --glass-fill: rgba(24, 24, 24, .94);
+  --glass-blur: 24px;
+  position: absolute;
+  top: calc(100% + 8px);
+  max-height: calc(100dvh - 128px);
+  overflow-y: auto;
+}
+.portal-heading, .portal-page { --pm: #c3c3c0; --pd: #b5b5b2; --pt: #f4f4f1; }
+.portal-auth-card.liquid-surface { --glass-fill: rgba(24, 24, 24, .62); }
+.portal-profile-panel.liquid-surface,
+.portal-restoration.liquid-surface { --glass-fill: rgba(24, 24, 24, .78); }
+.portal-service.liquid-surface:hover,
+.ref-structure-card.liquid-surface:hover,
+.document-card.liquid-surface:hover { background: rgba(49, 49, 49, .72); border-color: rgba(255, 255, 255, .36); }
+.portal-auth-tabs { background: rgba(0, 0, 0, .20); padding: 4px; gap: 4px; }
+.portal-auth-tabs a { border-radius: 12px; }
+.portal-auth-tabs a.active { background: rgba(255, 255, 255, .10); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .14), inset 0 -2px #e55a62; }
+.portal-auth-tabs a:hover { background: rgba(255, 255, 255, .08); }
+.portal-input { background: rgba(0, 0, 0, .48); border-color: rgba(255, 255, 255, .30); color: #f4f4f1; }
+.portal-input:hover { border-color: rgba(255, 255, 255, .50); }
+.portal-input:focus { background: rgba(0, 0, 0, .64); border-color: #ffadb4; }
+.portal-input::placeholder { color: #b5b5b2; }
+.portal-input[readonly] { background: rgba(0, 0, 0, .32); }
+select.portal-input, select.portal-input option { background-color: #181818; }
+.portal-discord-panel, .portal-applicant, .transfer-target { background: rgba(0, 0, 0, .28); border-color: rgba(255, 255, 255, .16); }
+.portal-application.liquid-surface { --glass-fill: rgba(24, 24, 24, .86); --glass-blur: 12px; }
+.ref-candidate-panel.liquid-surface { border-width: 1px; }
+.ref-rank-card.liquid-surface { --glass-fill: rgba(24, 24, 24, .78); --glass-blur: 12px; }
+.ref-structure-card.liquid-surface { --glass-fill: rgba(24, 24, 24, .74); }
+.search-dialog { background: rgba(0, 0, 0, .60); }
+.search-dialog-panel.liquid-surface { --glass-fill: rgba(24, 24, 24, .90); }
+.document-article { background: #181818; }
+.site-footer { background: rgba(0, 0, 0, .92); }
+.site-footer .footer-game-notice { background: #181818; }
+:is(a, button, input, select, textarea, summary):focus-visible { outline: 2px solid #ff9ba4; outline-offset: 4px; }
+@media (max-width: 720px), (pointer: coarse) {
+  :root { --glass-blur: 12px; }
+  .liquid-backdrop { opacity: .20; }
+  .site-header.liquid-surface { top: 8px; margin-top: 8px; width: calc(100% - 24px); --glass-radius: 16px; }
+  .site-header .header-inner { width: calc(100% - 24px); gap: 12px; }
+  .liquid-surface.glass-lens::before { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .portal-auth-card.liquid-surface { --glass-fill: rgba(24, 24, 24, .80); }
+  .mobile-menu.liquid-surface { --glass-fill: rgba(24, 24, 24, .96); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .liquid-surface, .button, .portal-page .button { transition: none; }
+  .liquid-surface.glass-lens::before { backdrop-filter: none; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .liquid-backdrop { display: none; }
+  .liquid-surface { --glass-fill: #181818; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .liquid-surface.glass-lens::before { backdrop-filter: none; }
+}
+@media (forced-colors: active) {
+  .liquid-backdrop { display: none; }
+  .liquid-surface, .button, .portal-page .button, .portal-input { background: Canvas !important; color: CanvasText !important; border-color: ButtonText !important; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .liquid-surface::before { display: none; }
+}
+@media print {
+  .liquid-backdrop, .liquid-filter-defs, .liquid-surface::before { display: none !important; }
+  .liquid-surface { background: #fff !important; color: #000 !important; border-color: #999; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+  .document-article { background: #fff; }
+}
