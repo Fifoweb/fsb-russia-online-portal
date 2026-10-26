@@ -1,0 +1,10 @@
+{
+  "name": "fsb-russia-online-portal-pages",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node scripts/check.mjs",
+    "test": "node --test scripts/auth-privacy.test.mjs scripts/auth-redirect.test.mjs"
+  }
+}

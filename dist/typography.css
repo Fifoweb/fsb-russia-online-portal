@@ -1,0 +1,215 @@
+/* One readable Cyrillic family and one type scale for the entire portal. */
+:root {
+  --font: 'Manrope', system-ui, sans-serif;
+  --mono: var(--font);
+  --type-primary: #f4f4f1;
+  --type-secondary: #b5b5b5;
+  --type-caption: #a8a8a8;
+  --type-accent: #f39aa2;
+  --muted: var(--type-secondary);
+}
+body { font-family: var(--font); font-size: 16px; line-height: 24px; letter-spacing: 0; color: var(--type-primary); }
+button, input, select, textarea { font-family: var(--font); }
+h1, h2, h3, h4 { font-weight: 600; letter-spacing: -.02em; text-wrap: balance; }
+p, li, dd { text-wrap: pretty; }
+em { font-style: normal; }
+strong, b { font-weight: 700; }
+.brand-name, .ref-header-inner .brand-name { font-size: 24px; line-height: 32px; font-weight: 700; letter-spacing: -.02em; }
+.brand-sub, .ref-header-inner .brand-sub { font-size: 12px; line-height: 16px; color: var(--type-secondary); letter-spacing: .03em; font-weight: 500; }
+.main-nav { gap: 16px; }
+.nav-link { font-size: 14px; line-height: 20px; color: var(--type-secondary); }
+.ref-header-actions .ref-staff-link { font-size: 14px; line-height: 20px; font-weight: 600; }
+.button { font-size: 16px; line-height: 24px; font-weight: 600; letter-spacing: 0; }
+.button.small, .document-toolbar .button, .document-toolbar .toolbar-actions .button,
+.tab, .filter-chip, .source-link, .text-link { font-size: 14px; line-height: 20px; letter-spacing: 0; }
+.tab, .filter-chip, .icon-button { min-height: 44px; }
+.button.small, .document-toolbar .button { min-height: 44px; }
+.document-toolbar .icon-button { min-width: 44px; font-size: 16px; line-height: 24px; }
+.breadcrumb, .page-meta, .badge, .eyebrow, .section-kicker,
+.sidebar-note, .doc-number, .doc-footer, .results-count,
+.search-hint, .search-result small, .search-result > .eyebrow,
+.document-toolbar > .muted, .document-meta, .document-end,
+.editorial-note, .uniform-reference > span, .wardrobe-path,
+.map-selected, .map-toolbar, .map-toolbar span, .map-toolbar button, .map-toolbar > .text-link,
+.amendment-grid .eyebrow, .sidebar > .eyebrow, .map-room-list > .eyebrow,
+.footer-bottom, .footer-nav > .eyebrow, .footer-nav h3 {
+  font-family: var(--font); font-size: 14px; line-height: 20px;
+  color: var(--type-caption); letter-spacing: 0; font-weight: 400;
+}
+.page-title { max-width: 20ch; font-size: 60px; line-height: 60px; font-weight: 600; letter-spacing: -.03em; }
+.section-title { font-size: 48px; line-height: 48px; font-weight: 600; letter-spacing: -.02em; }
+.page-description, .section-intro { max-width: 65ch; font-size: 18px; line-height: 28px; color: var(--type-secondary); }
+.panel p, .info-text, .info-card ul, .prose, .prose p, .prose li,
+.task-list li p, .check-list li, .step-text, .compact-steps,
+.doc-description, .dept-description, .quick-desc, .quick-card > p:not(.quick-desc),
+.uniform-content p, .uniform-content ol, .uniform-content ul, .uniform-card > p,
+.search-result p, .empty-state, .amendment-grid p, .schedule-item p, .schedule-item span {
+  font-size: 16px; line-height: 24px; color: var(--type-secondary);
+}
+.panel h2, .prose h2, .uniform-content h2, .uniform-card > h2 { font-size: 30px; line-height: 36px; }
+.panel h3, .info-title, .prose h3, .uniform-content h3, .doc-title,
+.dept-name, .step-title, .quick-title { font-size: 24px; line-height: 32px; font-weight: 600; letter-spacing: -.02em; }
+.sidebar-link, .toc-link { font-size: 14px; line-height: 20px; color: var(--type-secondary); }
+.sidebar-link small { font-size: 12px; line-height: 16px; color: var(--type-caption); }
+.map-marker { font-size: 12px; line-height: 16px; }
+.rank-table th, .rank-table td, .rank-table .rank-group th { font-size: 14px; line-height: 20px; letter-spacing: 0; }
+.schedule-time { font-size: 30px; line-height: 36px; font-variant-numeric: tabular-nums; }
+.search-input, .search-field .search-input { font-size: 16px; line-height: 24px; }
+.search-input::placeholder { color: var(--type-caption); }
+.search-result h3 { font-size: 20px; line-height: 28px; }
+.faq summary { font-size: 20px; line-height: 28px; font-weight: 600; }
+.faq details p { font-size: 16px; line-height: 24px; color: var(--type-secondary); max-width: 65ch; }
+.footer-brand > p, .footer-nav a { font-size: 16px; line-height: 24px; color: var(--type-secondary); }
+.footer-bottom a { color: var(--type-secondary); }
+
+/* Home: strong headings, readable supporting copy and labels. */
+.ref-word { font-size: 128px; line-height: 128px; letter-spacing: -.04em; font-weight: 700; margin-left: 0; }
+.ref-subtitle { max-width: 680px; font-size: 48px; line-height: 48px; font-weight: 600; letter-spacing: -.03em; }
+.ref-lead { max-width: 52ch; font-size: 18px; line-height: 28px; color: var(--type-secondary); }
+.ref-kicker, .ref-note, .ref-status, .ref-scroll, .ref-section-label,
+.ref-stat-meta, .ref-task-index, .ref-task-top, .ref-dept-code,
+.ref-rank-group > h3, .ref-step > span, .ref-step-number {
+  font-family: var(--font); font-size: 14px; line-height: 20px;
+  color: var(--type-caption); letter-spacing: .01em; text-transform: none;
+}
+.ref-kicker { max-width: 680px; }
+.ref-hero-bottom { align-items: flex-start; }
+.ref-status { max-width: 70%; }
+.ref-section-head h2, .ref-section-title, .ref-docs-copy h2, .ref-faq-layout > h2 {
+  font-size: 60px; line-height: 60px; font-weight: 600; letter-spacing: -.03em; max-width: 680px;
+}
+.ref-section-head > p, .ref-docs-copy > p, .ref-about-copy > p,
+.ref-join-copy p, .ref-join-aside p, .ref-candidate-panel > p, .ref-cta p {
+  font-size: 18px; line-height: 28px; color: var(--type-secondary); max-width: 65ch;
+}
+.ref-about-copy > p { max-width: 60ch; }
+.ref-values p, .ref-task p, .ref-dept-description, .ref-dept-tasks li,
+.ref-step p, .ref-join-aside ul { font-size: 16px; line-height: 24px; color: var(--type-secondary); }
+.ref-values h3, .ref-values strong { font-size: 18px; line-height: 28px; font-weight: 600; }
+.ref-values > div > span, .ref-values .ref-value-number { font-size: 14px; line-height: 20px; color: var(--type-accent); }
+.ref-task h3, .ref-access-card h3, .ref-step h3, .ref-join-copy h3, .ref-join-aside h3 {
+  font-size: 24px; line-height: 32px; font-weight: 600; letter-spacing: -.02em;
+}
+.ref-dept-name { font-size: 30px; line-height: 36px; font-weight: 600; letter-spacing: -.02em; }
+.ref-dept-name small { font-size: 14px; line-height: 20px; letter-spacing: 0; color: var(--type-caption); }
+.ref-dept-link, .ref-section-head .text-link { font-size: 16px; line-height: 24px; }
+.ref-stat-value { font-size: 60px; line-height: 60px; font-weight: 600; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.ref-stat-label, .ref-stat > p, .ref-stat > span:not(.ref-stat-value) { font-size: 16px; line-height: 24px; color: var(--type-secondary); }
+.ref-stat .ref-stat-meta { font-size: 14px; line-height: 20px; color: var(--type-caption); }
+.ref-doc-list a { font-size: 18px; line-height: 28px; }
+.ref-doc-list small { font-size: 14px; line-height: 20px; color: var(--type-caption); }
+.ref-rank-name { font-size: 18px; line-height: 28px; font-weight: 600; letter-spacing: 0; overflow-wrap: anywhere; }
+.ref-rank-role { font-size: 14px; line-height: 20px; color: var(--type-secondary); }
+.ref-rank-category { font-size: 12px; line-height: 16px; color: var(--type-accent); letter-spacing: 0; }
+.ref-rank-card { min-width: 0; }
+.ref-gallery-caption > b, .ref-gallery-caption h3, .ref-gallery-caption strong { font-size: 20px; line-height: 28px; font-weight: 600; }
+.ref-gallery-caption > small, .ref-gallery-caption p, .ref-gallery-caption span { font-size: 14px; line-height: 20px; color: var(--type-secondary); }
+.ref-gallery-image > span { font-size: 14px; line-height: 20px; }
+.ref-candidate-panel h3 { font-size: 36px; line-height: 40px; font-weight: 600; letter-spacing: -.02em; }
+.ref-candidate-panel .ref-note { font-family: var(--font); font-size: 14px; line-height: 20px; color: var(--type-caption); }
+.ref-cta h2 { font-size: 72px; line-height: 72px; font-weight: 600; letter-spacing: -.03em; }
+.ref-about-visual > span, .ref-about-visual small, .ref-about-visual .mono,
+.ref-access-top, .ref-access-bottom, .ref-access-caption, .ref-access-card p, .ref-access-card small {
+  font-family: var(--font); font-size: 12px; line-height: 16px;
+  color: var(--type-caption); letter-spacing: 0; text-transform: none;
+}
+.ref-access-title { font-size: 24px; line-height: 32px; font-weight: 600; letter-spacing: 0; }
+.ref-access-bottom b { font-size: 16px; line-height: 24px; }
+.ref-access-bottom { flex-wrap: wrap; }
+.boot-word { font-size: 48px; line-height: 48px; font-weight: 600; }
+.boot-label, .boot-bottom span, .boot-log, .boot-skip { font-family: var(--font); font-size: 14px; line-height: 20px; color: var(--type-secondary); letter-spacing: 0; }
+.boot-skip { min-height: 44px; }
+
+/* Documents keep the reader-size controls and their saved preference. */
+@media screen {
+  .document-article { padding: 32px; font-size: var(--reader-size, 18px); }
+  .document-article > .document-chapter, .document-article > .document-notice,
+  .document-article > .notice, .document-article > .document-meta,
+  .document-article > .document-end, .document-article > .document-block { max-width: 72ch; margin-inline: 0; }
+  .document-article .document-block { font-size: var(--reader-size, 18px); line-height: var(--reader-leading, 28px); letter-spacing: 0; margin-block: 16px; }
+  .document-article > .document-block { color: #333a41; }
+  .document-article .document-block.doc-subheading { font-size: max(20px, var(--reader-size, 18px)); line-height: max(28px, var(--reader-leading, 28px)); font-weight: 700; }
+  .document-chapter h2, .document-chapter h3 { font-size: 24px; line-height: 32px; font-weight: 600; letter-spacing: -.02em; }
+  .document-article .document-meta, .document-article .document-end { font-size: 14px; line-height: 20px; color: #515963; letter-spacing: 0; }
+  .notice, .document-notice, .document-article .amendment-note { font-size: 16px; line-height: 24px; }
+  .chapter-heading .section-kicker { font-size: 14px; line-height: 20px; letter-spacing: 0; }
+  .chapter-heading > .icon-button { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
+}
+
+/* Account and forms use the same family, with larger supporting information. */
+.portal-heading, .portal-page { --pm: #b5b5b5; --pd: #a8a8a8; font-family: var(--font); }
+.portal-heading .page-title { font-size: 36px; line-height: 40px; letter-spacing: -.02em; }
+.portal-heading .page-description { font-size: 16px; line-height: 24px; }
+.portal-heading .breadcrumb { font-size: 14px; line-height: 20px; }
+.portal-profile-identity p, .portal-profile-data dt, .portal-profile-note,
+.portal-application-id, .portal-application-bottom time, .portal-label,
+.portal-history-overview, .portal-field-hint, .portal-form-title > span,
+.portal-applicant-main span, .portal-applicant-discord span,
+.portal-counter, .portal-help, .portal-submit-row p, .portal-form-footer,
+.portal-application-details dt, .portal-password-wrap button, .portal-profile-bottom p,
+.portal-applicant :is(.portal-applicant-main,.portal-applicant-discord) > div > span {
+  font-size: 14px; line-height: 20px; color: var(--pd);
+}
+.portal-profile-data dd, .portal-application-details dd, .portal-section-head p,
+.portal-cabinet-banner p, .portal-application > p, .portal-service p {
+  font-size: 16px; line-height: 24px;
+}
+.portal-refresh { font-size: 14px; line-height: 20px; }
+.portal-connected, .portal-delivery { font-size: 14px; line-height: 20px; }
+.portal-application h3 { font-size: 20px; line-height: 28px; }
+
+@media (max-width: 1280px) {
+  .ref-nav { display: none; }
+  .ref-header-actions { margin-left: auto; }
+  .menu-toggle { display: inline-flex; }
+  .ref-subtitle { font-size: 36px; line-height: 40px; max-width: 600px; }
+  .ref-section-head h2, .ref-section-title, .ref-docs-copy h2, .ref-faq-layout > h2 { font-size: 48px; line-height: 48px; }
+}
+@media (max-width: 950px) {
+  .ref-word { font-size: 96px; line-height: 96px; }
+  .ref-rank-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ref-section-head { align-items: flex-start; }
+  .ref-section-head h2, .ref-section-title, .ref-docs-copy h2, .ref-faq-layout > h2 { font-size: 36px; line-height: 40px; }
+  .page-title, .section-title { font-size: 36px; line-height: 40px; }
+  .ref-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .ref-header-inner .brand-text { flex-direction: column; align-items: flex-start; gap: 0; }
+  .ref-header-inner .brand-sub { border: 0; padding-left: 0; font-size: 12px; line-height: 16px; }
+  .ref-header-inner .brand-name { font-size: 24px; line-height: 32px; }
+  .ref-word { font-size: 96px; line-height: 96px; margin-left: 0; margin-bottom: 24px; }
+  .ref-subtitle { font-size: 30px; line-height: 36px; max-width: 100%; letter-spacing: -.02em; }
+  .ref-lead, .ref-section-head > p, .ref-about-copy > p, .ref-docs-copy > p,
+  .ref-join-copy p, .ref-join-aside p, .ref-candidate-panel > p, .ref-cta p,
+  .page-description, .section-intro { font-size: 16px; line-height: 24px; }
+  .ref-hero-content { padding-top: 48px; padding-bottom: 192px; }
+  .ref-kicker { margin-bottom: 24px; font-size: 12px; line-height: 16px; }
+  .ref-actions .button { font-size: 16px; line-height: 24px; padding: 12px 16px; }
+  .ref-hero .ref-actions { flex-direction: column; align-items: stretch; gap: 12px; }
+  .ref-hero .ref-actions .button { min-width: 0; justify-content: space-between; }
+  .ref-note, .ref-status, .ref-scroll { font-size: 12px; line-height: 16px; }
+  .ref-status { max-width: none; }
+  .ref-values > div { grid-template-columns: 24px minmax(0, 1fr); gap: 8px 12px; }
+  .ref-values > div > p { grid-column: 2; }
+  .ref-dept-name { font-size: 24px; line-height: 32px; }
+  .ref-task h3, .ref-step h3 { font-size: 24px; line-height: 32px; }
+  .ref-rank-grid { grid-template-columns: 1fr; }
+  .ref-rank-card { display: grid; grid-template-columns: 62px minmax(0, 1fr); gap: 24px; padding: 24px; text-align: left; }
+  .ref-rank-role { font-size: 16px; line-height: 24px; }
+  .ref-stat { padding: 24px 16px; }
+  .ref-stat-value { font-size: 48px; line-height: 48px; }
+  .ref-stat .ref-stat-meta { font-size: 12px; line-height: 16px; }
+  .ref-gallery-caption > b { font-size: 20px; line-height: 28px; }
+  .ref-access-card { padding: 24px; }
+  .ref-access-title { font-size: 20px; line-height: 28px; }
+  .ref-access-top { max-width: 75%; }
+  .ref-candidate-panel h3, .ref-cta h2 { font-size: 36px; line-height: 40px; }
+  .footer-bottom { gap: 16px; font-size: 14px; line-height: 20px; }
+  .document-article { padding: 24px 16px; }
+  .document-chapter h2, .document-chapter h3 { font-size: 20px; line-height: 28px; }
+  .document-toolbar .toolbar-actions { margin-left: 0; }
+  .search-dialog-panel { padding: 24px 16px; }
+  .portal-heading .page-title { font-size: 30px; line-height: 36px; }
+  .portal-heading .page-description { font-size: 16px; line-height: 24px; }
+}
+@media print { body { font-family: var(--font); } }

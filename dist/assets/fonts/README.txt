@@ -1,0 +1,1 @@
+Fonts: Inter Tight and JetBrains Mono. Downloaded from Google Fonts CSS API; licensed under the SIL Open Font License. Source: https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300..800&family=JetBrains+Mono:wght@400..500&display=swap
