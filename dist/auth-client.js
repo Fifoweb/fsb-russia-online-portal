@@ -29,9 +29,16 @@ const messages = {
   invalid_profile_department:'Выберите отдел из списка.',
   invalid_report_recipient:'Выберите адресата отчёта.',
   invalid_recipient_username:'Введите точный Discord username, с @ или без него.',
-  invalid_senior_ranks:'Выберите повышение от подполковника до генерал-полковника. Новый ранг должен быть выше текущего.',
+  invalid_senior_ranks:'Выберите ранги от 1 до 14. Ранг повышения должен быть выше текущего.',
   invalid_report_evidence:'Добавьте от 1 до 10 HTTPS-ссылок на доказательства работы.',
   report_consent_required:'Подтвердите отправку отчёта в Discord.',
+  invalid_discord_id:'Discord ID должен содержать от 17 до 20 цифр.',
+  invalid_discord_contact:'Проверьте никнейм Discord.',
+  invalid_guest_token:'Не удалось подготовить отправку. Обновите страницу.',
+  invalid_evidence:'Добавьте нужные ссылки на подтверждения.',
+  invalid_url:'Укажите полную HTTPS-ссылку без логина и пароля.',
+  invalid_reason:'Заполните причину, не более 1000 символов.',
+  invalid_rank:'Укажите корректный номер прежнего ранга.',
   authentication_required: 'Войдите в свой аккаунт.',
   invalid_credentials: 'Неверный Static ID или пароль.',
   registration_unavailable: 'Не удалось зарегистрироваться. Возможно, этот никнейм или Static ID уже занят.',
@@ -130,7 +137,7 @@ export async function initAccount() {
     try { const saved = sessionStorage.getItem('portal-discord-return'); if (/^#\/(applications(?:\/(?:reinstatement|transfer|internal-transfer|senior-report))?|account)(?:\?.*)?$/.test(saved || '')) returnPath = saved; sessionStorage.removeItem('portal-discord-return'); } catch { /* storage may be disabled */ }
     if (code) {
       const { error } = await client.auth.exchangeCodeForSession(code);
-      if (error) callbackError = 'Не удалось завершить вход через Discord. Попробуйте привязать аккаунт ещё раз.';
+      if (error) callbackError = 'Не удалось завершить привязку Discord. Попробуйте привязать аккаунт ещё раз.';
     } else callbackError = 'Привязка Discord отменена или не завершена.';
     for (const key of ['code', 'error', 'error_code', 'error_description', 'auth_callback']) url.searchParams.delete(key);
     url.hash = returnPath.slice(1);
@@ -153,6 +160,11 @@ export async function registerAccount({ gameName, staticId, password }) {
 }
 export async function loginAccount({ staticId, password }) {
   return acceptSession(await endpoint('portal-auth', { action: 'login', staticId, password }, false));
+}
+// Forms are public. An account is used only when this view belongs to that
+// account; a guest request never silently inherits a different user's session.
+export async function openApplicationRequest(body, owner = null) {
+  return endpoint('portal-open-application', body, Boolean(owner), owner);
 }
 export async function logoutAccount() {
   if (client) { const { error } = await client.auth.signOut({ scope: 'local' }); if (error) throw fail('service_unavailable'); }
@@ -177,11 +189,11 @@ export function unlinkDiscord() {
 }
 export async function linkDiscord(returnPath) {
   if (!(await session())) throw fail('authentication_required');
-  try { sessionStorage.setItem('portal-discord-return', ['#/applications/transfer','#/applications/internal-transfer','#/applications/senior-report'].includes(returnPath) ? returnPath : window.location.hash.startsWith('#/applications') ? window.location.hash : '#/applications/reinstatement'); } catch { /* PKCE SDK will report if storage unavailable */ }
+  try { sessionStorage.setItem('portal-discord-return', '#/account'); } catch { /* PKCE SDK will report if storage unavailable */ }
   // PKCE verifier belongs to this origin. Return to the same origin and project
   // path on GitHub Pages; Supabase's exact allowlist validates the destination.
   const { error } = await client.auth.linkIdentity({ provider: 'discord', options: { redirectTo: discordCallbackUrl(window.location.href) } });
-  if (error) throw fail('discord_not_configured', 'Не удалось открыть вход через Discord. Попробуйте позднее или сообщите руководству.');
+  if (error) throw fail('discord_not_configured', 'Не удалось открыть привязку Discord. Попробуйте позднее или сообщите руководству.');
 }
 
 function proofLinks(proof) {

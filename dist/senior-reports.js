@@ -1,4 +1,4 @@
-import * as api from './auth-client.js?v=guild-recipients-1';
+import * as api from './auth-client.js?v=open-forms-1';
 import { seniorRanks } from './data/senior-report-rules.js?v=report-ranks-1';
 import { internalDepartments } from './data/internal-departments.js?v=guild-recipients-1';
 
