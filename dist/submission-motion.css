@@ -1,0 +1,47 @@
+dialog.submission-motion{--send-accent:#1abc9c;position:fixed;inset:0;width:min(480px,calc(100% - 32px));max-height:calc(100dvh - 32px);margin:auto;padding:32px;border:1px solid #ffffff24;border-radius:16px;background:#181818;color:#fff;box-shadow:0 24px 80px #0008;text-align:center;overflow:auto;animation:submission-arrive .32s cubic-bezier(.32,.72,0,1) both}
+.submission-motion::backdrop{background:#000b;backdrop-filter:blur(8px)}
+.submission-motion .submission-motion-close{position:absolute;right:12px;top:12px;width:32px;height:32px;display:grid;place-items:center;padding:8px;border:1px solid transparent;border-radius:8px;background:transparent;color:#aeb5b8;cursor:pointer;transition:color .2s cubic-bezier(.32,.72,0,1),background .2s cubic-bezier(.32,.72,0,1)}
+.submission-motion-close:hover{background:#ffffff0c;color:#fff}
+.submission-motion-close:focus-visible{outline:2px solid var(--send-accent);outline-offset:2px}
+.submission-motion-close svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.5}
+.submission-motion .submission-motion-label{font-size:14px;line-height:20px;color:#afb8b6;margin:0 24px 16px}
+.submission-motion-scene{position:relative;width:100%;aspect-ratio:2/1;margin:0 auto 24px}
+.submission-motion-flight{width:100%;height:100%;overflow:visible}
+.submission-motion-route,.submission-motion-trace{fill:none;stroke-width:1.5}
+.submission-motion-route{stroke:#ffffff16;stroke-dasharray:3 7}
+.submission-motion-trace{stroke:var(--send-accent);stroke-dasharray:18 280;animation:submission-trace 1.8s cubic-bezier(.45,0,.55,1) infinite}
+.submission-motion-node{fill:#1f1f1f;stroke:#ffffff30;stroke-width:1}
+.submission-motion-line{fill:none;stroke:#c2ccca;stroke-width:1.5;stroke-linejoin:round}
+.submission-motion-discord{fill:var(--send-accent)}
+.submission-motion-flight text{fill:#9da9a6;font-size:12px;font-family:inherit}
+.submission-motion-beacon{fill:none;stroke:var(--send-accent);stroke-width:1;animation:submission-beacon 1.8s cubic-bezier(.32,.72,0,1) infinite;transform-box:fill-box;transform-origin:center}
+.submission-motion-packet{animation:submission-flight 1.8s cubic-bezier(.45,0,.55,1) infinite}
+.submission-motion-packet rect{fill:#e5fff9;stroke:var(--send-accent);stroke-width:1.5}
+.submission-motion-packet path{fill:none;stroke:#276459;stroke-width:1.5;stroke-linecap:round}
+.submission-motion-result{display:none;position:absolute;inset:0;align-items:center;justify-content:center}
+.submission-motion-result>svg{width:104px;height:104px;overflow:visible;position:relative}
+.submission-motion-result-circle{fill:#1f1f1f;stroke:var(--send-accent);stroke-width:1.5;animation:submission-result .45s cubic-bezier(.32,.72,0,1) both}
+.submission-motion-check,.submission-motion-cross,.submission-motion-clock{display:none;fill:none;stroke:var(--send-accent);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.submission-motion[data-state=sent] .submission-motion-check{display:block;stroke-dasharray:64;stroke-dashoffset:64;animation:submission-check .45s .12s cubic-bezier(.32,.72,0,1) forwards}
+.submission-motion[data-state=error]{--send-accent:#e78b8b}
+.submission-motion[data-state=error] .submission-motion-cross{display:block}
+.submission-motion[data-state=pending],.submission-motion[data-state=unknown],.submission-motion[data-state=unconfirmed]{--send-accent:#d9b778}
+.submission-motion:is([data-state=pending],[data-state=unknown],[data-state=unconfirmed]) .submission-motion-clock{display:block;stroke-width:2}
+.submission-motion:not([data-state=sending]) .submission-motion-flight{display:none}
+.submission-motion:not([data-state=sending]) .submission-motion-result{display:flex}
+.submission-motion .submission-motion-particles{display:none;position:absolute;left:50%;top:50%;width:0;height:0}
+.submission-motion[data-state=sent] .submission-motion-particles{display:block}
+.submission-motion-particles i{position:absolute;width:4px;height:4px;background:var(--send-accent);border-radius:50%;animation:submission-particle .8s cubic-bezier(.2,.7,.3,1) both}
+.submission-motion h2{font-size:24px;line-height:32px;font-weight:600;letter-spacing:-.025em;margin:0 0 12px;text-wrap:balance}
+.submission-motion #submission-motion-description{font-size:16px;line-height:24px;color:#c1c8c6;margin:0;text-wrap:pretty}
+.submission-motion .submission-motion-note{font-size:12px;line-height:16px;color:#8b9693;margin:24px 0 0}
+@keyframes submission-arrive{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes submission-flight{0%{opacity:0;transform:translate(36px,126px) rotate(-32deg) scale(.75)}12%{opacity:1}50%{transform:translate(180px,59px) rotate(0deg) scale(1)}88%{opacity:1}100%{opacity:0;transform:translate(324px,126px) rotate(32deg) scale(.75)}}
+@keyframes submission-trace{from{stroke-dashoffset:298}to{stroke-dashoffset:0}}
+@keyframes submission-beacon{0%,100%{opacity:.15;transform:scale(.9)}55%{opacity:.7;transform:scale(1.15)}}
+@keyframes submission-result{from{opacity:0;transform:scale(.85);transform-origin:center}to{opacity:1;transform:scale(1);transform-origin:center}}
+@keyframes submission-check{to{stroke-dashoffset:0}}
+@keyframes submission-particle{from{opacity:0;transform:rotate(var(--particle-angle)) translateX(44px) scale(.5)}25%{opacity:1}to{opacity:0;transform:rotate(var(--particle-angle)) translateX(92px) scale(.5)}}
+@media(max-width:600px){dialog.submission-motion{padding:24px}.submission-motion-scene{margin-bottom:16px}.submission-motion h2{font-size:24px;line-height:32px}}
+@media(prefers-reduced-motion:reduce){dialog.submission-motion,.submission-motion *{animation:none!important;transition:none!important}.submission-motion-packet{transform:translate(180px,59px)}.submission-motion-trace{display:none}.submission-motion-check{stroke-dashoffset:0!important}.submission-motion .submission-motion-particles{display:none!important}}
+@media print{dialog.submission-motion{display:none!important}}

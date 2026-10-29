@@ -1,3 +1,4 @@
+import { beginSubmissionMotion } from './submission-motion.js?v=send-animation-1';
 import { discordIdHelp, discordIdInstruction } from './discord-id-help.js?v=academy-1';
 import * as api from './auth-client.js?v=academy-1';
 import { transferRules } from './data/transfer-rules.js';
@@ -90,6 +91,7 @@ export function renderOpenFormPage(kind) {
   const feedback=`<div class="portal-message is-error" data-open-error role="alert" ${d.error?'':'hidden'}>${esc(d.error)}</div>`;
   let content;
   if(d.success) content=receipt(d.success)+`<div class="portal-actions"><button class="button secondary" type="button" data-open-action="new">Новая заявка</button><a class="text-link" href="#/applications">Все формы ↗</a></div>${feedback}${owner(state)?'':notice}`;
+  else if(d.pending&&d.busy) content=`<div class="portal-gate" role="status"><h2>Отправляем заявку</h2><p>Дождитесь подтверждения. Результат появится здесь.</p></div>`;
   else if(d.pending) content=`<div class="portal-gate"><h2>Проверим результат отправки</h2><p>Данные этой попытки сохранены в текущей вкладке. Проверим статус или повторим тот же запрос с прежним номером.</p><div class="portal-actions"><button class="button secondary" type="button" data-open-action="status">Проверить статус</button><button class="button primary" type="button" data-open-action="resend">Повторить запрос</button></div>${feedback}</div>`;
   else content=`${owner(state)?notice:''}<form class="portal-restoration open-form" data-open-form="${kind}" aria-busy="${d.busy}"><div class="portal-form-body">${applicantIdentity(kind,d,state)}<div class="open-specific" data-open-specific>${specificFields(kind,d)}</div>${kind==='academy'?`<fieldset class="open-identity"><legend>Контакт Discord</legend>${discordFields(kind,d,state)}</fieldset>`:''}<div class="open-honeypot" aria-hidden="true"><label>Не заполняйте это поле<input name="website" tabindex="-1" autocomplete="off"></label></div><div class="portal-submit-area"><label class="portal-consent"><input type="checkbox" name="consent" required ${d.values.consent?'checked':''}><span>Подтверждаю игровые данные и согласен на сохранение заявки и отправку её в Discord фракции.</span></label>${feedback}<div class="portal-submit-row"><p>Настоящие документы не отправляйте.</p><button class="button primary" type="submit" ${d.busy?'disabled':''}>${d.busy?'Сохраняем и отправляем…':'Отправить заявку'}</button></div></div></div></form>${owner(state)?'':notice}`;
   return head(type.title)+`<section class="container portal-page portal-form-page" data-open-page="${kind}">${content}</section>`;
@@ -116,7 +118,8 @@ function historyMarkup(value) {
 export function mountOpenApplications({onStateChange=()=>{}}={}) {
   let state=api.getAccountState(),signature=JSON.stringify(state),alive=true;
   const page=document.querySelector('[data-open-page]'),kind=page?.dataset.openPage;
-  const d=kind?draftFor(kind,state):null,expectedOwner=owner(state);
+  const d=kind?draftFor(kind,state):null,expectedOwner=owner(state),viewState=state;
+  let sendingMotion=null;
   const rerender=()=>{if(alive){const y=window.scrollY;onStateChange();window.scrollTo({top:y,behavior:'instant'});}};
   const request=body=>api.openApplicationRequest(body,expectedOwner);
   async function loadHistory(){if(!expectedOwner)return;try{const r=await request({action:'list'});histories.set(expectedOwner,r.applications);}catch(e){histories.set(expectedOwner,{error:e.message});}if(alive){const node=document.querySelector('[data-open-history-body]');if(node)node.innerHTML=historyMarkup(histories.get(expectedOwner));}}
@@ -125,11 +128,37 @@ export function mountOpenApplications({onStateChange=()=>{}}={}) {
     if(name==='sourceStructure')d.values.sourceRank='';
     if(name==='sourceDepartment'&&d.values.targetDepartment===d.values.sourceDepartment)d.values.targetDepartment='';
     if(name==='fromRank'&&seniorRanks.findIndex(r=>r.id===d.values.toRank)<=seniorRanks.findIndex(r=>r.id===d.values.fromRank))d.values.toRank='';
-    save(kind,state,d);
+    save(kind,viewState,d);
     if(['dismissalType','sourceStructure','sourceRank','sourceDepartment','recipient','fromRank'].includes(name)){const fields=page?.querySelector('[data-open-specific]');if(fields)fields.innerHTML=specificFields(kind,d);}
   }
-  async function send(){if(!d?.pending||d.busy)return;d.busy=true;d.error='';page?.querySelectorAll('button').forEach(b=>b.disabled=true);try{const r=await request(d.pending);d.lastRequest=d.pending;d.success=r.application;d.pending=null;histories.delete(expectedOwner);if(kind==='internal_transfer'&&expectedOwner)await api.refreshProfileDepartment({fresh:true}).catch(()=>{});}catch(e){d.error=e.message;if(e.status>=400&&e.status<500&&e.code!=='idempotency_conflict')d.pending=null;}finally{d.busy=false;save(kind,state,d);if(owner(api.getAccountState())===expectedOwner&&location.hash.split('?')[0]===`#/applications/${types.find(t=>t.id===kind).route}`)onStateChange();}}
-  async function submit(event){if(!event.target.matches('[data-open-form]'))return;event.preventDefault();if(d.busy)return;values(event.target);if(event.target.elements.website.value)return;d.pending=payload(kind,d,state);save(kind,state,d);await send();}
+  async function send(){
+    if(!d?.pending||d.busy)return;
+    d.busy=true;d.error='';
+    const form=page?.querySelector('[data-open-form]');
+    const inline=document.createElement('p');inline.className='portal-field-hint submission-inline';inline.setAttribute('role','status');inline.textContent='Отправляем заявку в Discord…';
+    page?.prepend(inline);
+    page?.querySelectorAll('button').forEach(button=>button.disabled=true);
+    if(form){form.inert=true;form.setAttribute('aria-busy','true');const button=form.querySelector('[type=submit]');if(button)button.textContent='Отправляем…';}
+    sendingMotion=beginSubmissionMotion({label:types.find(type=>type.id===kind)?.title});
+    try{
+      const result=await request(d.pending);
+      d.lastRequest=d.pending;d.success=result.application;d.pending=null;histories.delete(expectedOwner);
+    }catch(error){
+      d.error=error.message;
+      if(error.status>=400&&error.status<500&&error.code!=='idempotency_conflict')d.pending=null;
+    }finally{
+      // Persist the real result before presenting it. Closing or navigating away
+      // during the visual cannot discard a receipt or change the request key.
+      save(kind,viewState,d);
+      try{await sendingMotion?.complete({status:d.success?.delivery_status||(d.pending?'unconfirmed':'error'),message:d.error});}catch{/* Visual feedback cannot change submission outcome. */}
+      sendingMotion?.destroy();sendingMotion=null;
+      d.busy=false;inline.remove();if(form){form.inert=false;form.setAttribute('aria-busy','false');}
+      save(kind,viewState,d);
+      if(kind==='internal_transfer'&&expectedOwner&&d.success&&owner(api.getAccountState())===expectedOwner)await api.refreshProfileDepartment({fresh:true}).catch(()=>{});
+      if(owner(api.getAccountState())===expectedOwner&&location.hash.split('?')[0]===`#/applications/${types.find(type=>type.id===kind).route}`)onStateChange();
+    }
+  }
+  async function submit(event){if(!event.target.matches('[data-open-form]'))return;event.preventDefault();if(d.busy)return;values(event.target);if(event.target.elements.website.value)return;d.pending=payload(kind,d,viewState);save(kind,viewState,d);await send();}
   async function click(event){const button=event.target.closest('[data-open-action]');if(!button||button.disabled)return;const action=button.dataset.openAction;
     if(action==='refresh-history')return loadHistory();
     if(action==='retry-history'){
@@ -141,19 +170,19 @@ export function mountOpenApplications({onStateChange=()=>{}}={}) {
     }
     if(!d||d.busy)return;
     if(action==='new'){drafts.delete(key(kind,state));try{sessionStorage.removeItem(key(kind,state));}catch{}return rerender();}
-    if(action==='add-person'||action==='remove-person'){const count=Math.max(1,Math.min(5,(Number(d.values.peopleCount)||1)+(action==='add-person'?1:-1)));if(action==='remove-person')d.values[`person${count+1}`]='';d.values.peopleCount=String(count);save(kind,state,d);return rerender();}
+    if(action==='add-person'||action==='remove-person'){const count=Math.max(1,Math.min(5,(Number(d.values.peopleCount)||1)+(action==='add-person'?1:-1)));if(action==='remove-person')d.values[`person${count+1}`]='';d.values.peopleCount=String(count);save(kind,viewState,d);return rerender();}
     if(action==='resend')return send();
     d.error='';
     try{
       if(action==='check-people'){d.checking=true;button.disabled=true;button.textContent='Проверяем…';const r=await request({action:'check-people',guestToken:d.guestToken,recipientUsernames:Array.from({length:5},(_,i)=>d.values[`person${i+1}`]||'')});d.checked=r.members;}
       if(action==='status'){const r=await request({...d.pending,action:'status'});if(r.application){d.lastRequest=d.pending;d.success=r.application;d.pending=null;}else d.error='Запись пока не найдена. Повторите запрос с сохранёнными данными.';}
       if(action==='retry'){const id=d.success.id;const savedBody=d.lastRequest;if(savedBody){const r=await request({...savedBody,action:'retry'});d.success=r.application;}else d.error=`Сообщите номер заявки руководству: ${id}`;}
-    }catch(e){d.error=e.message;}finally{d.checking=false;save(kind,state,d);rerender();}
+    }catch(e){d.error=e.message;}finally{d.checking=false;save(kind,viewState,d);rerender();}
   }
-  function inputEvent(event){if(d&&event.target.name&&event.target.tagName!=='SELECT'){d.values[event.target.name]=event.target.type==='checkbox'?event.target.checked:event.target.value;save(kind,state,d);}}
+  function inputEvent(event){if(d&&event.target.name&&event.target.tagName!=='SELECT'){d.values[event.target.name]=event.target.type==='checkbox'?event.target.checked:event.target.value;save(kind,viewState,d);}}
   const main=document.querySelector('#main');
   main?.addEventListener('submit',submit);main?.addEventListener('change',update);main?.addEventListener('input',inputEvent);main?.addEventListener('click',click);
   const unsubscribe=api.subscribeAccount(next=>{if(JSON.stringify(next)!==signature){signature=JSON.stringify(next);state=next;rerender();}});
   if(expectedOwner&&document.querySelector('[data-open-history]'))void loadHistory();
-  return ()=>{alive=false;unsubscribe();main?.removeEventListener('submit',submit);main?.removeEventListener('change',update);main?.removeEventListener('input',inputEvent);main?.removeEventListener('click',click);};
+  return ()=>{alive=false;sendingMotion?.destroy();unsubscribe();main?.removeEventListener('submit',submit);main?.removeEventListener('change',update);main?.removeEventListener('input',inputEvent);main?.removeEventListener('click',click);};
 }
