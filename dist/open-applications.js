@@ -1,5 +1,5 @@
 import { beginSubmissionMotion } from './submission-motion.js?v=send-animation-1';
-import { renderAcademyStatementPreview, mountAcademyStatement } from './academy-statement.js?v=statement-credit-1';
+import { renderAcademyStatementPreview, mountAcademyStatement } from './academy-statement.js?v=site-creator-1';
 import { discordIdHelp, discordIdInstruction } from './discord-id-help.js?v=academy-1';
 import * as api from './auth-client.js?v=academy-1';
 import { transferRules } from './data/transfer-rules.js';
