@@ -1,4 +1,5 @@
 import { beginSubmissionMotion } from './submission-motion.js?v=send-animation-1';
+import { renderAcademyStatementPreview, mountAcademyStatement } from './academy-statement.js?v=statement-1';
 import { discordIdHelp, discordIdInstruction } from './discord-id-help.js?v=academy-1';
 import * as api from './auth-client.js?v=academy-1';
 import { transferRules } from './data/transfer-rules.js';
@@ -93,7 +94,10 @@ export function renderOpenFormPage(kind) {
   if(d.success) content=receipt(d.success)+`<div class="portal-actions"><button class="button secondary" type="button" data-open-action="new">Новая заявка</button><a class="text-link" href="#/applications">Все формы ↗</a></div>${feedback}${owner(state)?'':notice}`;
   else if(d.pending&&d.busy) content=`<div class="portal-gate" role="status"><h2>Отправляем заявку</h2><p>Дождитесь подтверждения. Результат появится здесь.</p></div>`;
   else if(d.pending) content=`<div class="portal-gate"><h2>Проверим результат отправки</h2><p>Данные этой попытки сохранены в текущей вкладке. Проверим статус или повторим тот же запрос с прежним номером.</p><div class="portal-actions"><button class="button secondary" type="button" data-open-action="status">Проверить статус</button><button class="button primary" type="button" data-open-action="resend">Повторить запрос</button></div>${feedback}</div>`;
-  else content=`${owner(state)?notice:''}<form class="portal-restoration open-form" data-open-form="${kind}" aria-busy="${d.busy}"><div class="portal-form-body">${applicantIdentity(kind,d,state)}<div class="open-specific" data-open-specific>${specificFields(kind,d)}</div>${kind==='academy'?`<fieldset class="open-identity"><legend>Контакт Discord</legend>${discordFields(kind,d,state)}</fieldset>`:''}<div class="open-honeypot" aria-hidden="true"><label>Не заполняйте это поле<input name="website" tabindex="-1" autocomplete="off"></label></div><div class="portal-submit-area"><label class="portal-consent"><input type="checkbox" name="consent" required ${d.values.consent?'checked':''}><span>Подтверждаю игровые данные и согласен на сохранение заявки и отправку её в Discord фракции.</span></label>${feedback}<div class="portal-submit-row"><p>Настоящие документы не отправляйте.</p><button class="button primary" type="submit" ${d.busy?'disabled':''}>${d.busy?'Сохраняем и отправляем…':'Отправить заявку'}</button></div></div></div></form>${owner(state)?'':notice}`;
+  else {
+    const form=`<form class="portal-restoration open-form" data-open-form="${kind}" aria-busy="${d.busy}"><div class="portal-form-body">${applicantIdentity(kind,d,state)}<div class="open-specific" data-open-specific>${specificFields(kind,d)}</div>${kind==='academy'?`<fieldset class="open-identity"><legend>Контакт Discord</legend>${discordFields(kind,d,state)}</fieldset>`:''}<div class="open-honeypot" aria-hidden="true"><label>Не заполняйте это поле<input name="website" tabindex="-1" autocomplete="off"></label></div><div class="portal-submit-area"><label class="portal-consent"><input type="checkbox" name="consent" required ${d.values.consent?'checked':''}><span>Подтверждаю игровые данные и согласен на сохранение заявки и отправку её в Discord фракции${kind==='academy'?', включая изображение заявления':''}.</span></label>${feedback}<div class="portal-submit-row"><p>Настоящие документы не отправляйте.</p><button class="button primary" type="submit" ${d.busy?'disabled':''}>${d.busy?'Сохраняем и отправляем…':'Отправить заявку'}</button></div></div></div></form>`;
+    content=`${owner(state)?notice:''}${kind==='academy'?`<div class="academy-application-layout"><div class="academy-form-column">${form}</div>${renderAcademyStatementPreview()}</div>`:form}${owner(state)?'':notice}`;
+  }
   return head(type.title)+`<section class="container portal-page portal-form-page" data-open-page="${kind}">${content}</section>`;
 }
 function payload(kind,d,state) {
@@ -120,6 +124,7 @@ export function mountOpenApplications({onStateChange=()=>{}}={}) {
   const page=document.querySelector('[data-open-page]'),kind=page?.dataset.openPage;
   const d=kind?draftFor(kind,state):null,expectedOwner=owner(state),viewState=state;
   let sendingMotion=null;
+  const statement=kind==='academy'?mountAcademyStatement(page,()=>({game_name:state.profile?.game_name??d.values.gameName,passport_number:d.values.passportNumber,law_knowledge:d.values.lawKnowledge,about:d.values.about,organization_activity:d.values.organizationActivity,discord:state.discord||{id:d.values.discordId,username:d.values.discordUsername}})):null;
   const rerender=()=>{if(alive){const y=window.scrollY;onStateChange();window.scrollTo({top:y,behavior:'instant'});}};
   const request=body=>api.openApplicationRequest(body,expectedOwner);
   async function loadHistory(){if(!expectedOwner)return;try{const r=await request({action:'list'});histories.set(expectedOwner,r.applications);}catch(e){histories.set(expectedOwner,{error:e.message});}if(alive){const node=document.querySelector('[data-open-history-body]');if(node)node.innerHTML=historyMarkup(histories.get(expectedOwner));}}
@@ -129,6 +134,7 @@ export function mountOpenApplications({onStateChange=()=>{}}={}) {
     if(name==='sourceDepartment'&&d.values.targetDepartment===d.values.sourceDepartment)d.values.targetDepartment='';
     if(name==='fromRank'&&seniorRanks.findIndex(r=>r.id===d.values.toRank)<=seniorRanks.findIndex(r=>r.id===d.values.fromRank))d.values.toRank='';
     save(kind,viewState,d);
+    statement?.update();
     if(['dismissalType','sourceStructure','sourceRank','sourceDepartment','recipient','fromRank'].includes(name)){const fields=page?.querySelector('[data-open-specific]');if(fields)fields.innerHTML=specificFields(kind,d);}
   }
   async function send(){
@@ -179,10 +185,10 @@ export function mountOpenApplications({onStateChange=()=>{}}={}) {
       if(action==='retry'){const id=d.success.id;const savedBody=d.lastRequest;if(savedBody){const r=await request({...savedBody,action:'retry'});d.success=r.application;}else d.error=`Сообщите номер заявки руководству: ${id}`;}
     }catch(e){d.error=e.message;}finally{d.checking=false;save(kind,viewState,d);rerender();}
   }
-  function inputEvent(event){if(d&&event.target.name&&event.target.tagName!=='SELECT'){d.values[event.target.name]=event.target.type==='checkbox'?event.target.checked:event.target.value;save(kind,viewState,d);}}
+  function inputEvent(event){if(d&&event.target.name&&event.target.tagName!=='SELECT'){d.values[event.target.name]=event.target.type==='checkbox'?event.target.checked:event.target.value;save(kind,viewState,d);statement?.update();}}
   const main=document.querySelector('#main');
   main?.addEventListener('submit',submit);main?.addEventListener('change',update);main?.addEventListener('input',inputEvent);main?.addEventListener('click',click);
   const unsubscribe=api.subscribeAccount(next=>{if(JSON.stringify(next)!==signature){signature=JSON.stringify(next);state=next;rerender();}});
   if(expectedOwner&&document.querySelector('[data-open-history]'))void loadHistory();
-  return ()=>{alive=false;sendingMotion?.destroy();unsubscribe();main?.removeEventListener('submit',submit);main?.removeEventListener('change',update);main?.removeEventListener('input',inputEvent);main?.removeEventListener('click',click);};
+  return ()=>{alive=false;statement?.destroy();sendingMotion?.destroy();unsubscribe();main?.removeEventListener('submit',submit);main?.removeEventListener('change',update);main?.removeEventListener('input',inputEvent);main?.removeEventListener('click',click);};
 }

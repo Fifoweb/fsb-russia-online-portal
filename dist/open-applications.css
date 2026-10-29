@@ -27,3 +27,22 @@
 .open-history-item h3{font-size:20px;margin:0 0 8px}
 .open-history-item p{color:#b6bac3;margin:8px 0}
 @media(max-width:600px){.open-benefits,.open-access-note{padding:16px}.open-benefits .portal-actions{align-items:stretch;flex-direction:column}.open-form .portal-short-fields{grid-template-columns:minmax(0,1fr)}.open-form .portal-actions{flex-wrap:wrap}.open-receipt{overflow-wrap:anywhere}}
+
+.portal-form-page[data-open-page="academy"]{max-width:1240px}
+.academy-application-layout{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(320px,1fr);gap:32px;align-items:start}
+.academy-form-column{min-width:0}
+.academy-statement-preview{position:sticky;top:104px;min-width:0;padding:24px;border:1px solid var(--pl,#383838);border-radius:12px;background:#181818}
+.academy-statement-preview summary{cursor:pointer;list-style-position:outside;margin-left:16px;min-height:44px;color:var(--pt,#f0f0ec)}
+.academy-statement-heading{font-size:20px;line-height:28px;font-weight:600}
+.academy-statement-caption{display:block;margin-top:4px;color:var(--pm,#b0b0ab);font-size:12px;line-height:16px}
+.academy-statement-content{display:grid;gap:16px;margin-top:24px}
+.academy-paper{aspect-ratio:1240/1754;background:#fff;box-shadow:0 8px 24px #0003;overflow:hidden}
+.academy-paper svg,.academy-statement-full svg{display:block;width:100%;height:auto;font-family:Manrope,sans-serif}
+.academy-statement-content>p{margin:0;font-size:14px;line-height:20px;color:var(--pm,#b0b0ab)}
+.academy-statement-content>.button{width:100%}
+.academy-statement-dialog{width:min(960px,calc(100% - 32px));max-height:calc(100dvh - 32px);padding:0;border:1px solid #383838;border-radius:12px;background:#181818;color:#f0f0ec;overscroll-behavior:contain}
+.academy-statement-dialog::backdrop{background:#000b}
+.academy-statement-toolbar{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px;background:#181818;z-index:1}
+.academy-statement-toolbar h2{margin:0;font:600 18px/28px Manrope,sans-serif}
+.academy-statement-full{padding:0 24px 24px}
+@media(max-width:999px){.academy-application-layout{grid-template-columns:minmax(0,1fr);gap:24px}.academy-statement-preview{position:static;grid-row:1}.academy-statement-content{max-width:480px;margin-inline:auto}.academy-statement-dialog{max-height:calc(100dvh - 16px)}.academy-statement-full{padding:0 8px 8px}.academy-statement-toolbar{padding:12px 16px}.academy-statement-toolbar h2{font-size:16px;line-height:24px}}

@@ -1,4 +1,4 @@
-import { renderOpenApplicationsPage, renderOpenFormPage, renderOpenServices, renderOpenHistorySection, mountOpenApplications } from './open-applications.js?v=send-animation-1';
+import { renderOpenApplicationsPage, renderOpenFormPage, renderOpenServices, renderOpenHistorySection, mountOpenApplications } from './open-applications.js?v=academy-statement-1';
 import { mountAccountDepartment } from './account-department.js?v=academy-1';
 import { renderSeniorReportPage, renderSeniorReportService, renderSeniorReportHistorySection, mountSeniorReports } from './senior-reports.js?v=academy-1';
 import { renderInternalTransferPage, renderInternalTransferService, renderInternalTransferHistorySection, mountInternalTransfers } from './internal-transfers.js?v=academy-1';
