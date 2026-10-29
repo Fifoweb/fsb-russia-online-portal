@@ -1,4 +1,5 @@
 import { statementGlyphWidths } from './academy-statement-metrics.js';
+import { statementOrnaments, statementSeal } from './academy-statement-art.js';
 // Shared with the server renderer. Only validated text is used on the server;
 // escaping here also keeps the live, unfinished browser draft safe.
 export const STATEMENT_WIDTH = 1240;
@@ -34,12 +35,13 @@ export function academyStatement(snapshot = {}, createdAt = new Date().toISOStri
   const about = clean(snapshot.about, 'Здесь появится ваш рассказ о персонаже.');
   const activity = clean(snapshot.organization_activity, 'Здесь появится ваш ответ о работе организации.');
   const date = new Intl.DateTimeFormat('ru-RU', {timeZone:'Europe/Moscow',day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date(createdAt));
-  const header = ['Начальнику Академии ФСБ', 'Россия Онлайн', `от ${name}`, `Игровой паспорт № ${passport}`];
+  const header = ['Начальнику Академии ФСБ', 'Россия Онлайн', `Кандидат: ${name}`, `Игровой паспорт № ${passport}`];
   let hy = 124;
-  const head = header.flatMap(value => statementLines(value, 540, 24).map(line => {
-    const result = `<text x="600" y="${hy}" font-size="24">${xml(line)}</text>`; hy += 36; return result;
+  const head = header.flatMap(value => statementLines(value, 490, 24).map(line => {
+    const result = `<text x="650" y="${hy}" font-size="24">${xml(line)}</text>`; hy += 36; return result;
   })).join('');
-  const titleY = Math.max(384, hy + 32);
+  const ruleY = Math.max(292, hy + 24);
+  const titleY = ruleY + 72;
   const blocks = [
     ['Прошу принять меня на обучение в Академию ФСБ игровой фракции проекта «Россия Онлайн». Прошу рассмотреть мою кандидатуру на основании представленной анкеты.', false],
     [`Знание законодательной базы: ${knowledge}.`, false],
@@ -50,20 +52,20 @@ export function academyStatement(snapshot = {}, createdAt = new Date().toISOStri
     [`Контакт Discord: ${username}. ID: ${discordId}.`, false],
   ];
   let content = '', endY = 0, fontSize = 28;
-  // Keep even the two maximum-length answers on a single printable A4 sheet.
-  for (const size of [28, 26, 24, 22, 20, 18, 16, 14]) {
+  // Reserve the lower area for the decorative faction seal, even for long answers.
+  for (const size of [28, 26, 24, 22, 20, 18, 16, 14, 12]) {
     let y = titleY + 72; const parts = [];
     for (const [value, heading] of blocks) {
       if (heading) y += 12;
       for (const line of statementLines(value, 1040, size)) {
-        parts.push(`<text x="100" y="${y}" font-size="${size}"${heading?' font-weight="700"':''}>${xml(line)}</text>`);
+        parts.push(`<text x="100" y="${y}" font-size="${size}"${heading?' font-weight="700" fill="#1d3650"':''}>${xml(line)}</text>`);
         y += Math.ceil(size * 1.5);
       }
       y += heading ? 4 : 16;
     }
     content = parts.join(''); endY = y; fontSize = size;
-    if (y <= 1510) break;
+    if (y <= 1310) break;
   }
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${STATEMENT_WIDTH} ${STATEMENT_HEIGHT}" width="${STATEMENT_WIDTH}" height="${STATEMENT_HEIGHT}" role="img" aria-label="Заявление в академию ФСБ: ${xml(name)}"><rect width="1240" height="1754" fill="#fff"/><g fill="#202020" font-family="Manrope, sans-serif">${head}<text x="620" y="${titleY}" text-anchor="middle" font-size="32" font-weight="700" letter-spacing="3">ЗАЯВЛЕНИЕ</text>${content}<text x="100" y="1580" font-size="24">${xml(date)}</text><text x="1140" y="1580" text-anchor="end" font-size="24">Электронная заявка</text><path d="M100 1640H1140" stroke="#d3d3d3"/><text x="100" y="1680" font-size="18" fill="#666">Россия Онлайн · Игровой документ</text><text x="1140" y="1680" text-anchor="end" font-size="18" fill="#666">${xml(applicationId ? `Заявка ${applicationId.slice(0,8)}` : 'Анкета кандидата')}</text></g></svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${STATEMENT_WIDTH} ${STATEMENT_HEIGHT}" width="${STATEMENT_WIDTH}" height="${STATEMENT_HEIGHT}" role="img" aria-label="Заявление в академию ФСБ: ${xml(name)}"><rect width="1240" height="1754" fill="#fffefa"/><g fill="#202832" font-family="Manrope, sans-serif">${statementOrnaments(ruleY)}${head}<text x="620" y="${titleY}" text-anchor="middle" font-size="36" font-weight="700" letter-spacing="4" fill="#1d3650">ЗАЯВЛЕНИЕ</text>${content}<text x="100" y="1440" font-size="14" letter-spacing="2" fill="#777366">ДАТА ПОДАЧИ</text><text x="100" y="1480" font-size="24">${xml(date)}</text><text x="100" y="1536" font-size="18" fill="#777366">Сформировано на портале игровой фракции</text>${statementSeal()}<path d="M100 1632H1140" stroke="#d9cfb8"/><text x="100" y="1680" font-size="16" fill="#666">Россия Онлайн · Игровой документ</text><text x="1140" y="1680" text-anchor="end" font-size="16" fill="#666">${xml(applicationId ? `Заявка ${applicationId.slice(0,8)}` : 'Анкета кандидата')}</text></g></svg>`;
   return {svg, fontSize, endY, text: [...header,'ЗАЯВЛЕНИЕ',...blocks.map(([text])=>text),date,name,'Россия Онлайн · Игровой документ'].join('\n')};
 }
