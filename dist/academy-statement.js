@@ -1,4 +1,4 @@
-import { academyStatement } from './academy-statement-template.js?v=statement-seal-1';
+import { academyStatement } from './academy-statement-template.js?v=statement-credit-1';
 
 export function renderAcademyStatementPreview() {
   return `<aside class="academy-statement-preview" aria-label="Предпросмотр заявления"><details data-statement-details open><summary><span class="academy-statement-heading">Ваше заявление</span><span class="academy-statement-caption">Заполняется вместе с анкетой</span></summary><div class="academy-statement-content"><div class="academy-paper" data-statement-paper></div><p>Этот лист будет прикреплён к заявке в Discord как PNG.</p><button class="button secondary" type="button" data-statement-open>Открыть заявление</button></div></details><dialog class="academy-statement-dialog" data-statement-dialog aria-labelledby="academy-statement-title"><div class="academy-statement-toolbar"><h2 id="academy-statement-title">Заявление в академию</h2><button class="button secondary" type="button" data-statement-close>Закрыть</button></div><div class="academy-statement-full" data-statement-full></div></dialog></aside>`;
