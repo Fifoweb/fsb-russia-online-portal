@@ -86,7 +86,7 @@ export function renderOpenFormPage(kind) {
   if(!d.values.dismissalType)d.values.dismissalType='regular';
   if(!d.values.recipient)d.values.recipient='senior';
   if(kind==='internal_transfer'&&!d.values.sourceDepartment&&state.profile?.department?.id)d.values.sourceDepartment=state.profile.department.id;
-  const notice=owner(state)?`<div class="open-access-note"><p>Вы вошли как <strong>${esc(state.profile.game_name)}</strong>. Ник и статик подставлены из профиля. <a href="#/account">Личный кабинет ↗</a></p></div>`:renderAccountBenefits();
+  const notice=owner(state)?`<div class="open-access-note"><p>Вы вошли как <strong>${esc(state.profile.game_name)}</strong>. ${kind==='academy'?'Имя персонажа подставлено из профиля.':'Ник и статик подставлены из профиля.'} <a href="#/account">Личный кабинет ↗</a></p></div>`:renderAccountBenefits();
   const feedback=`<div class="portal-message is-error" data-open-error role="alert" ${d.error?'':'hidden'}>${esc(d.error)}</div>`;
   let content;
   if(d.success) content=receipt(d.success)+`<div class="portal-actions"><button class="button secondary" type="button" data-open-action="new">Новая заявка</button><a class="text-link" href="#/applications">Все формы ↗</a></div>${feedback}${owner(state)?'':notice}`;
