@@ -1,4 +1,4 @@
-import { renderOpenApplicationsPage, renderOpenFormPage, renderOpenServices, renderOpenHistorySection, mountOpenApplications } from './open-applications.js?v=open-forms-1';
+import { renderOpenApplicationsPage, renderOpenFormPage, renderOpenServices, renderOpenHistorySection, mountOpenApplications } from './open-applications.js?v=optional-discord-name-1';
 import { mountAccountDepartment } from './account-department.js?v=open-forms-1';
 import { renderSeniorReportPage, renderSeniorReportService, renderSeniorReportHistorySection, mountSeniorReports } from './senior-reports.js?v=open-forms-1';
 import { renderInternalTransferPage, renderInternalTransferService, renderInternalTransferHistorySection, mountInternalTransfers } from './internal-transfers.js?v=open-forms-1';
