@@ -5,6 +5,15 @@
 .open-benefits .portal-actions{justify-content:flex-start}
 .open-form .portal-form-body{display:grid;gap:24px}
 .open-form .open-specific{display:grid;gap:24px}
+.discord-id-field{min-width:0;display:grid;gap:8px;align-content:start}
+.discord-id-help{font-size:14px;line-height:1.5;font-weight:400;color:#b6bac3;min-width:0;text-align:left}
+.discord-id-help summary{cursor:help;width:fit-content;color:#d6d9df;text-decoration:underline;text-underline-offset:4px}
+.discord-id-help summary:focus-visible{outline:2px solid #b42b35;outline-offset:4px;border-radius:4px}
+.discord-id-instructions{margin-top:8px;padding:16px;background:#181818;border:1px solid #ffffff20;border-radius:8px;overflow-wrap:anywhere}
+.discord-id-instructions ol{margin:0;padding-left:24px}
+.discord-id-instructions li+li{margin-top:8px}
+.discord-id-instructions p{margin:12px 0}
+.discord-id-instructions a{color:#fff}
 .open-form fieldset{min-width:0;margin:0;padding:0;border:0}
 .open-form legend{font-size:20px;font-weight:600;margin-bottom:24px}
 .open-form h2{font-size:24px;line-height:1.3;margin:0}

@@ -16,6 +16,11 @@ let state = { status: 'loading', profile: null, discord: null, error: null, conf
 let initialized = false, refreshing = null, lastSignature = '';
 let unlinking = null;
 const messages = {
+  academy_contact_required:'Укажите ваш Discord ID и никнейм для связи по анкете.',
+  academy_consent_required:'Подтвердите сохранение анкеты и отправку в Discord.',
+  invalid_academy_about:'Кратко расскажите о себе, до 800 символов.',
+  invalid_academy_activity:'Опишите работу организации, до 800 символов.',
+  invalid_academy_knowledge:'Укажите целое число от 0 до 10.',
   discord_member_token_invalid:'Discord не принял настройки поиска. Сообщите руководству.',
   discord_member_access_denied:'Поиск не получил доступ к серверу ФСБ. Сообщите руководству.',
   invalid_report_people:'Укажите не более пяти Discord username или ID.',
